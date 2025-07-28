@@ -1,0 +1,17 @@
+* {
+  pad: 0;
+  margin: 0;
+  box-sizing: border-box;
+}
+
+body {
+  height: 100vh;
+  width: 100vw;
+}
+
+nav {
+  height: 70px;
+  width: 100%;
+  background-color: red;
+  box-shadow: 2px 2px 8px rgba(0, 0, 0, 0.3);
+}
