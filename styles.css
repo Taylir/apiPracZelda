@@ -12,6 +12,45 @@ body {
 nav {
   height: 70px;
   width: 100%;
+  padding: 0 24px;
   background-color: red;
   box-shadow: 2px 2px 8px rgba(0, 0, 0, 0.3);
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+}
+
+#leftNav {
+  flex: 1;
+}
+
+.img_wrapper {
+  height: 50px;
+  width: 50px;
+  border-radius: 50%;
+  overflow: hidden;
+}
+
+.img_wrapper img {
+  height: 100%;
+  width: 100%;
+  background-position: center;
+  background-size: cover;
+}
+
+.img_wrapper img:hover {
+  animation: rotate 9000ms linear infinite;
+}
+
+@keyframes rotate {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+#navItems {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
