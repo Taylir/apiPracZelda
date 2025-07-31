@@ -1,5 +1,5 @@
 :root {
-  --nav-color: #2c5f3450;
+  --nav-color: #AaC87810;
 }
 
 * {
@@ -29,7 +29,7 @@ nav {
   width: 100%;
   padding: 0 24px;
   clip-path: inset(0 -100vmax);
-  box-shadow: 0 0 0 100vmax var(--nav-color);
+  box-shadow: 2px 0 0 100vmax var(--nav-color);
   background-color: var(--nav-color);
 }
 
@@ -44,21 +44,21 @@ nav .container {
   flex: 1;
 }
 
-.img_wrapper {
+nav .img_wrapper {
   height: 50px;
   width: 50px;
   border-radius: 50%;
   overflow: hidden;
 }
 
-.img_wrapper img {
+nav .img_wrapper img {
   height: 100%;
   width: 100%;
   background-position: center;
   background-size: cover;
 }
 
-.img_wrapper img:hover {
+nav .img_wrapper img:hover {
   animation: rotate 9000ms linear infinite;
 }
 
@@ -119,21 +119,73 @@ nav .container {
 #filterBar {
   width:100%;
   height: 50px;
-  background-color: brown;
+  background-color: #27667b;
   position: sticky;
+  margin-top: -50px;
   top: 70px;
 }
 
-#testSection {
-  height:100vh;
-  width: 100vw;
-  background-size: cover;
-  background-position: center
+#filterBar ul {
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  list-style:none;
 }
 
+#filterBar ul li {
+  padding: 4px 8px;
+  border-radius: 4px;
+  border: 1px solid silver;
+  transition: all 200ms ease;
+  cursor: pointer;
+}
 
+#filterBar ul li:hover {
+  border-radius: 0;
+  background-color: #57667B;
+  opacity: .7;
+}
 
+#displaySection {
+  height: 100%;
+  width: 100vw;
+  padding: 32px;
+}
 
+#displayHolder {
+  display: flex;
+  gap: 20px;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+}
 
+.zeldaItem {
+  border: 1px solid gold;
+  display: flex;
+  gap: 12px;
+  width: 100%;
+  height: 200px;
+  align-items: center;
+  justify-content: space-around;
+}
 
+.zeldaItem .img_wrapper {
+  height: 100%;
+  flex: 1;
+}
 
+.zeldaItem .img_wrapper img{
+  height: 100%;
+  width: 100%;
+  object-fit: cover;
+}
+.zeldaInfoHolder {
+  height: 100%;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-around;
+}
