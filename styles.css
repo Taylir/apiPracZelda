@@ -1,5 +1,5 @@
 :root {
-  --nav-color: #AaC87810;
+  --nav-color: #aac87810;
 }
 
 * {
@@ -9,7 +9,8 @@
 }
 
 body {
-  background-image: url("./assets/oldpaper.jpg");
+  background-image: url("assets/zeldabg.png");
+
   background-position: center;
   background-size: contain;
   height: 100%;
@@ -95,7 +96,7 @@ nav .img_wrapper img:hover {
 #navItems a:before {
   content: "";
   position: absolute;
-  background-color: #BE5103;
+  background-color: #be5103;
   width: 0%;
   height: 3px;
   bottom: 0;
@@ -109,15 +110,15 @@ nav .img_wrapper img:hover {
 }
 
 #heroSection {
-  height:100vh;
+  height: 100vh;
   width: 100vw;
   background-image: url("./assets/Linkbackground.jpg");
   background-size: cover;
-  background-position: center
+  background-position: center;
 }
 
 #filterBar {
-  width:100%;
+  width: 100%;
   height: 50px;
   background-color: #27667b;
   position: sticky;
@@ -130,7 +131,7 @@ nav .img_wrapper img:hover {
   display: flex;
   align-items: center;
   justify-content: space-around;
-  list-style:none;
+  list-style: none;
 }
 
 #filterBar ul li {
@@ -143,8 +144,8 @@ nav .img_wrapper img:hover {
 
 #filterBar ul li:hover {
   border-radius: 0;
-  background-color: #57667B;
-  opacity: .7;
+  background-color: #57667b;
+  opacity: 0.7;
 }
 
 #displaySection {
@@ -171,20 +172,9 @@ nav .img_wrapper img:hover {
   width: 400px;
   height: 400px;
   align-items: center;
+  flex-direction: column;
   justify-content: space-around;
-  backdrop-filter: blur(6px); 
-}
-
-.zeldaHeadInfo .img_wrapper {
-  border-radius: 6px;
-  overflow: hidden;
-  height: 80%;
-}
-
-.zeldaHeadInfo .img_wrapper img{
-  height: 100%;
-  width: 100%;
-  object-fit: cover;
+  backdrop-filter: blur(6px);
 }
 .zeldaInfoHolder {
   height: 100%;
@@ -195,12 +185,23 @@ nav .img_wrapper img:hover {
   align-items: center;
   justify-content: space-around;
 }
-
 .zeldaHeadInfo {
   width: 100%;
   display: flex;
   align-items: center;
   justify-content: space-around;
+}
+
+.zeldaHeadInfo .img_wrapper {
+  border-radius: 6px;
+  overflow: hidden;
+  height: 80%;
+}
+
+.zeldaHeadInfo .img_wrapper img {
+  height: 100%;
+  width: 100%;
+  object-fit: cover;
 }
 
 .zeldaHeadInfo h4 {
@@ -222,6 +223,3 @@ nav .img_wrapper img:hover {
 .zeldaInfo i {
   font-size: 28px;
 }
-
-
-
