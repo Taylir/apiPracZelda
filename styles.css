@@ -32,6 +32,7 @@ nav {
   clip-path: inset(0 -100vmax);
   box-shadow: 2px 0 0 100vmax var(--nav-color);
   background-color: var(--nav-color);
+  z-index: 1;
 }
 
 nav .container {
@@ -124,6 +125,7 @@ nav .img_wrapper img:hover {
   position: sticky;
   margin-top: -50px;
   top: 70px;
+  z-index: 1;
 }
 
 #filterBar ul {
@@ -163,48 +165,76 @@ nav .img_wrapper img:hover {
 }
 
 .zeldaItem {
-  border: 3px solid red;
-  border-radius: 12px;
-  background-color: rgba(0, 0, 0, 0.2);
-  padding: 6px;
+  border: 1px solid #695e44;
+  border-radius: 22px;
+  box-shadow: 2px 2px 12px rgba(0, 0, 0, 0.3);
+  padding: 16px;
   display: flex;
   gap: 12px;
   width: 400px;
   height: 400px;
   align-items: center;
   flex-direction: column;
-  justify-content: space-around;
+  justify-content: space-between;
   backdrop-filter: blur(6px);
+  transition: all 200ms ease-in-out;
+  cursor: pointer;
+  user-select: none;
 }
-.zeldaInfoHolder {
-  height: 100%;
-  padding: 8px;
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: space-around;
+
+.zeldaItem:hover {
+  box-shadow: 6px 6px 34px rgba(0, 0, 0, 0.8);
+  transform: scale(1.01);
 }
+
+.zeldaItem hr {
+  width: 100%;
+  color: #615539;
+}
+
 .zeldaHeadInfo {
   width: 100%;
+  gap: 16px;
   display: flex;
   align-items: center;
-  justify-content: space-around;
+  justify-content: space-between;
 }
 
 .zeldaHeadInfo .img_wrapper {
   border-radius: 6px;
   overflow: hidden;
-  height: 80%;
+  height: 200px;
+  width: 200px;
 }
 
 .zeldaHeadInfo .img_wrapper img {
   height: 100%;
   width: 100%;
   object-fit: cover;
+  box-shadow: 1px 1px 4px rgba(0, 0, 0, 0.3);
 }
 
-.zeldaHeadInfo h4 {
+.zeldaItemDesc {
+  height: 100%;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: space-between;
+}
+
+.zeldaHeadInfo .zeldaItemDesc h4 {
+  font-size: 24px;
+}
+
+.itemDescInternal {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.itemDescInternal i {
   font-size: 24px;
 }
 
@@ -218,8 +248,4 @@ nav .img_wrapper img:hover {
 
 .zeldaInfo p {
   text-align: center;
-}
-
-.zeldaInfo i {
-  font-size: 28px;
 }
