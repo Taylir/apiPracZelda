@@ -35,6 +35,16 @@ function createCard(): void {
             </div>
 `;
   cardHolder?.appendChild(zeldaDiv);
+  const heartSelection = document.querySelector(".fa-heart");
+  heartSelection?.addEventListener("click", () => {
+    if (heartSelection.classList.contains("fa-regular")) {
+      heartSelection.classList.remove("fa-regular");
+      heartSelection.classList.add("fa-solid");
+    } else {
+      heartSelection.classList.add("fa-regular");
+      heartSelection.classList.remove("fa-solid");
+    }
+  });
 }
 
 createCard();

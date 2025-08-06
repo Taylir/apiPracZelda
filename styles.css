@@ -249,3 +249,7 @@ nav .img_wrapper img:hover {
 .zeldaInfo p {
   text-align: center;
 }
+
+.fa-solid {
+  color: red;
+}
