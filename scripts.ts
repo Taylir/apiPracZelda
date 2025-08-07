@@ -1,5 +1,48 @@
 const cardHolder = document.querySelector<HTMLDivElement>("#displayHolder");
 
+const itemsArray: Array<CardItem> = [];
+
+async function getInitialData() {
+  const res = await fetch(
+    "https://botw-compendium.herokuapp.com/api/v3/compendium/entry/7",
+  );
+  const { data } = await res.json();
+
+  const item = new CardItem(
+    data.name,
+    data.id,
+    data.image,
+    data.common_locations,
+    data.description,
+  );
+  itemsArray.push(item);
+}
+getInitialData();
+
+class CardItem {
+  name: string;
+  id: number;
+  picture: string;
+  location: string;
+  description: string;
+
+  constructor(
+    name: string,
+    id: number,
+    picture: string,
+    location: string,
+    description: string,
+  ) {
+    ((this.name = name),
+      (this.id = id),
+      (this.picture = picture),
+      (this.location = location),
+      (this.description = description));
+  }
+}
+
+console.log(itemsArray);
+
 function createCard(): void {
   const zeldaDiv = document.createElement("div");
   zeldaDiv.classList += "zeldaItem";
