@@ -26,6 +26,7 @@ class CardItem {
   picture: string;
   location: string;
   description: string;
+  liked: boolean;
 
   constructor(
     name: string,
@@ -38,19 +39,38 @@ class CardItem {
       (this.id = id),
       (this.picture = picture),
       (this.location = location),
-      (this.description = description));
+      (this.description = description),
+      (this.liked = false));
   }
 }
 
 function displayCard() {
   itemsArray.forEach((item: CardItem, i: number) => {
     createCard(item, i);
+    likedOrNot(item);
+  });
+}
+
+function likedOrNot(item: CardItem) {
+  const thisItem = document.querySelector(`#zeldaItem-${item.id}`);
+  const thisHeart = thisItem?.querySelector(".fa-heart");
+  thisHeart?.addEventListener("click", () => {
+    if (thisHeart.classList.contains("fa-regular")) {
+      thisHeart.classList.remove("fa-regular");
+      thisHeart.classList.add("fa-solid");
+      item.liked = true;
+    } else {
+      thisHeart.classList.remove("fa-solid");
+      thisHeart.classList.add("fa-regular");
+      item.liked = false;
+    }
   });
 }
 
 function createCard(item: CardItem, itemIndex: number): void {
   const zeldaDiv = document.createElement("div");
   zeldaDiv.classList += "zeldaItem";
+  zeldaDiv.id = `zeldaItem-${item.id}`;
   zeldaDiv.innerHTML = `
             <div class="zeldaHeadInfo">
               <div class="img_wrapper">
@@ -64,10 +84,10 @@ function createCard(item: CardItem, itemIndex: number): void {
                 <p>
                   <strong>Located at:</strong>
                   <br />
-                  ${item?.location}
+                  ${item?.location || "No Location"}
                 </p>
                 <div class="itemDescInternal">
-                  <p>id: ${item.id}</p>
+                  <p>ID: ${item.id}</p>
                   <i class="fa-regular fa-heart"></i>
                 </div>
               </div>
@@ -79,20 +99,7 @@ function createCard(item: CardItem, itemIndex: number): void {
               </p>
             </div>
 `;
-  console.log(" I ran");
   cardHolder?.appendChild(zeldaDiv);
-  console.log("I ran again");
-
-  const heartSelection = document.querySelector(".fa-heart");
-  heartSelection?.addEventListener("click", () => {
-    if (heartSelection.classList.contains("fa-regular")) {
-      heartSelection.classList.remove("fa-regular");
-      heartSelection.classList.add("fa-solid");
-    } else {
-      heartSelection.classList.add("fa-regular");
-      heartSelection.classList.remove("fa-solid");
-    }
-  });
 }
 
 getInitialData().then(displayCard);

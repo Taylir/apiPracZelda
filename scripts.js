@@ -69,32 +69,39 @@ var CardItem = /** @class */ (function () {
             (this.id = id),
             (this.picture = picture),
             (this.location = location),
-            (this.description = description));
+            (this.description = description),
+            (this.liked = false));
     }
     return CardItem;
 }());
 function displayCard() {
     itemsArray.forEach(function (item, i) {
         createCard(item, i);
+        likedOrNot(item);
+        console.log(item);
+    });
+}
+function likedOrNot(item) {
+    var thisItem = document.querySelector("#zeldaItem-".concat(item.id));
+    var thisHeart = thisItem === null || thisItem === void 0 ? void 0 : thisItem.querySelector(".fa-heart");
+    thisHeart === null || thisHeart === void 0 ? void 0 : thisHeart.addEventListener("click", function () {
+        if (thisHeart.classList.contains("fa-regular")) {
+            thisHeart.classList.remove("fa-regular");
+            thisHeart.classList.add("fa-solid");
+            item.liked = true;
+        }
+        else {
+            thisHeart.classList.remove("fa-solid");
+            thisHeart.classList.add("fa-regular");
+            item.liked = false;
+        }
     });
 }
 function createCard(item, itemIndex) {
     var zeldaDiv = document.createElement("div");
     zeldaDiv.classList += "zeldaItem";
-    zeldaDiv.innerHTML = "\n            <div class=\"zeldaHeadInfo\">\n              <div class=\"img_wrapper\">\n                <img\n                  src=\"".concat(item.picture, "\"\n                  alt=\"").concat(item.name, "\"\n                />\n              </div>\n              <div class=\"zeldaItemDesc\">\n                <h4>").concat(item.name, "</h4>\n                <p>\n                  <strong>Located at:</strong>\n                  <br />\n                  ").concat(item === null || item === void 0 ? void 0 : item.location, "\n                </p>\n                <div class=\"itemDescInternal\">\n                  <p>id: ").concat(item.id, "</p>\n                  <i class=\"fa-regular fa-heart\"></i>\n                </div>\n              </div>\n            </div>\n            <hr />\n            <div class=\"zeldaInfo\">\n              <p>\n                \"").concat(item.description, "\"\n              </p>\n            </div>\n");
-    console.log(" I ran");
+    zeldaDiv.id = "zeldaItem-".concat(item.id);
+    zeldaDiv.innerHTML = "\n            <div class=\"zeldaHeadInfo\">\n              <div class=\"img_wrapper\">\n                <img\n                  src=\"".concat(item.picture, "\"\n                  alt=\"").concat(item.name, "\"\n                />\n              </div>\n              <div class=\"zeldaItemDesc\">\n                <h4>").concat(item.name, "</h4>\n                <p>\n                  <strong>Located at:</strong>\n                  <br />\n                  ").concat((item === null || item === void 0 ? void 0 : item.location) || "No Location", "\n                </p>\n                <div class=\"itemDescInternal\">\n                  <p>ID: ").concat(item.id, "</p>\n                  <i class=\"fa-regular fa-heart\"></i>\n                </div>\n              </div>\n            </div>\n            <hr />\n            <div class=\"zeldaInfo\">\n              <p>\n                \"").concat(item.description, "\"\n              </p>\n            </div>\n");
     cardHolder === null || cardHolder === void 0 ? void 0 : cardHolder.appendChild(zeldaDiv);
-    console.log("I ran again");
-    var heartSelection = document.querySelector(".fa-heart");
-    heartSelection === null || heartSelection === void 0 ? void 0 : heartSelection.addEventListener("click", function () {
-        if (heartSelection.classList.contains("fa-regular")) {
-            heartSelection.classList.remove("fa-regular");
-            heartSelection.classList.add("fa-solid");
-        }
-        else {
-            heartSelection.classList.add("fa-regular");
-            heartSelection.classList.remove("fa-solid");
-        }
-    });
 }
 getInitialData().then(displayCard);
