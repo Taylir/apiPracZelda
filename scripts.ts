@@ -3,21 +3,22 @@ const cardHolder = document.querySelector<HTMLDivElement>("#displayHolder");
 const itemsArray: Array<CardItem> = [];
 
 async function getInitialData() {
-  const res = await fetch(
-    "https://botw-compendium.herokuapp.com/api/v3/compendium/entry/7",
-  );
-  const { data } = await res.json();
+  for (let i = 1; i <= 10; i++) {
+    const res = await fetch(
+      `https://botw-compendium.herokuapp.com/api/v3/compendium/entry/${i}`,
+    );
+    const { data } = await res.json();
 
-  const item = new CardItem(
-    data.name,
-    data.id,
-    data.image,
-    data.common_locations,
-    data.description,
-  );
-  itemsArray.push(item);
+    const item = new CardItem(
+      data.name,
+      data.id,
+      data.image,
+      data.common_locations,
+      data.description,
+    );
+    itemsArray.push(item);
+  }
 }
-getInitialData();
 
 class CardItem {
   name: string;
@@ -41,28 +42,32 @@ class CardItem {
   }
 }
 
-console.log(itemsArray);
+function displayCard() {
+  itemsArray.forEach((item: CardItem, i: number) => {
+    createCard(item, i);
+  });
+}
 
-function createCard(): void {
+function createCard(item: CardItem, itemIndex: number): void {
   const zeldaDiv = document.createElement("div");
   zeldaDiv.classList += "zeldaItem";
   zeldaDiv.innerHTML = `
             <div class="zeldaHeadInfo">
               <div class="img_wrapper">
                 <img
-                  src="https://botw-compendium.herokuapp.com/api/v3/compendium/entry/donkey/image?game=totk"
-                  alt=""
+                  src="${item.picture}"
+                  alt="${item.name}"
                 />
               </div>
               <div class="zeldaItemDesc">
-                <h4>Donkey</h4>
+                <h4>${item.name}</h4>
                 <p>
                   <strong>Located at:</strong>
                   <br />
-                  Greater Hyrule
+                  ${item?.location}
                 </p>
                 <div class="itemDescInternal">
-                  <p>id:7</p>
+                  <p>id: ${item.id}</p>
                   <i class="fa-regular fa-heart"></i>
                 </div>
               </div>
@@ -70,14 +75,14 @@ function createCard(): void {
             <hr />
             <div class="zeldaInfo">
               <p>
-                "Smaller than horses, these are raised as livestock in the
-                countryside, so they don't exist in the wild. They're more
-                powerful than they look and specialize in transporting baggage.
-                This has made them popular with traveling merchants."
+                "${item.description}"
               </p>
             </div>
 `;
+  console.log(" I ran");
   cardHolder?.appendChild(zeldaDiv);
+  console.log("I ran again");
+
   const heartSelection = document.querySelector(".fa-heart");
   heartSelection?.addEventListener("click", () => {
     if (heartSelection.classList.contains("fa-regular")) {
@@ -90,4 +95,4 @@ function createCard(): void {
   });
 }
 
-createCard();
+getInitialData().then(displayCard);

@@ -38,23 +38,31 @@ var cardHolder = document.querySelector("#displayHolder");
 var itemsArray = [];
 function getInitialData() {
     return __awaiter(this, void 0, void 0, function () {
-        var res, data, item;
+        var i, res, data, item;
         return __generator(this, function (_a) {
             switch (_a.label) {
-                case 0: return [4 /*yield*/, fetch("https://botw-compendium.herokuapp.com/api/v3/compendium/entry/7")];
+                case 0:
+                    i = 1;
+                    _a.label = 1;
                 case 1:
+                    if (!(i <= 10)) return [3 /*break*/, 5];
+                    return [4 /*yield*/, fetch("https://botw-compendium.herokuapp.com/api/v3/compendium/entry/".concat(i))];
+                case 2:
                     res = _a.sent();
                     return [4 /*yield*/, res.json()];
-                case 2:
+                case 3:
                     data = (_a.sent()).data;
                     item = new CardItem(data.name, data.id, data.image, data.common_locations, data.description);
                     itemsArray.push(item);
-                    return [2 /*return*/];
+                    _a.label = 4;
+                case 4:
+                    i++;
+                    return [3 /*break*/, 1];
+                case 5: return [2 /*return*/];
             }
         });
     });
 }
-getInitialData();
 var CardItem = /** @class */ (function () {
     function CardItem(name, id, picture, location, description) {
         ((this.name = name),
@@ -65,12 +73,18 @@ var CardItem = /** @class */ (function () {
     }
     return CardItem;
 }());
-console.log(itemsArray);
-function createCard() {
+function displayCard() {
+    itemsArray.forEach(function (item, i) {
+        createCard(item, i);
+    });
+}
+function createCard(item, itemIndex) {
     var zeldaDiv = document.createElement("div");
     zeldaDiv.classList += "zeldaItem";
-    zeldaDiv.innerHTML = "\n            <div class=\"zeldaHeadInfo\">\n              <div class=\"img_wrapper\">\n                <img\n                  src=\"https://botw-compendium.herokuapp.com/api/v3/compendium/entry/donkey/image?game=totk\"\n                  alt=\"\"\n                />\n              </div>\n              <div class=\"zeldaItemDesc\">\n                <h4>Donkey</h4>\n                <p>\n                  <strong>Located at:</strong>\n                  <br />\n                  Greater Hyrule\n                </p>\n                <div class=\"itemDescInternal\">\n                  <p>id:7</p>\n                  <i class=\"fa-regular fa-heart\"></i>\n                </div>\n              </div>\n            </div>\n            <hr />\n            <div class=\"zeldaInfo\">\n              <p>\n                \"Smaller than horses, these are raised as livestock in the\n                countryside, so they don't exist in the wild. They're more\n                powerful than they look and specialize in transporting baggage.\n                This has made them popular with traveling merchants.\"\n              </p>\n            </div>\n";
+    zeldaDiv.innerHTML = "\n            <div class=\"zeldaHeadInfo\">\n              <div class=\"img_wrapper\">\n                <img\n                  src=\"".concat(item.picture, "\"\n                  alt=\"").concat(item.name, "\"\n                />\n              </div>\n              <div class=\"zeldaItemDesc\">\n                <h4>").concat(item.name, "</h4>\n                <p>\n                  <strong>Located at:</strong>\n                  <br />\n                  ").concat(item === null || item === void 0 ? void 0 : item.location, "\n                </p>\n                <div class=\"itemDescInternal\">\n                  <p>id: ").concat(item.id, "</p>\n                  <i class=\"fa-regular fa-heart\"></i>\n                </div>\n              </div>\n            </div>\n            <hr />\n            <div class=\"zeldaInfo\">\n              <p>\n                \"").concat(item.description, "\"\n              </p>\n            </div>\n");
+    console.log(" I ran");
     cardHolder === null || cardHolder === void 0 ? void 0 : cardHolder.appendChild(zeldaDiv);
+    console.log("I ran again");
     var heartSelection = document.querySelector(".fa-heart");
     heartSelection === null || heartSelection === void 0 ? void 0 : heartSelection.addEventListener("click", function () {
         if (heartSelection.classList.contains("fa-regular")) {
@@ -83,4 +97,4 @@ function createCard() {
         }
     });
 }
-createCard();
+getInitialData().then(displayCard);
