@@ -63,6 +63,7 @@ function getInitialData() {
         });
     });
 }
+console.log(itemsArray.length);
 var CardItem = /** @class */ (function () {
     function CardItem(name, id, picture, location, description) {
         ((this.name = name),
@@ -78,7 +79,6 @@ function displayCard() {
     itemsArray.forEach(function (item, i) {
         createCard(item, i);
         likedOrNot(item);
-        console.log(item);
     });
 }
 function likedOrNot(item) {
