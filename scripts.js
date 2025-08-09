@@ -81,7 +81,7 @@ loadMore === null || loadMore === void 0 ? void 0 : loadMore.addEventListener("c
     getData(current).then(displayCard);
 });
 function displayCard() {
-    cardHolder.innerHTML = "";
+    cardHolder === null || cardHolder === void 0 ? void 0 : cardHolder.innerHTML = "";
     itemsArray.forEach(function (item, i) {
         createCard(item, i);
         likedOrNot(item);

@@ -51,7 +51,9 @@ loadMore?.addEventListener("click", () => {
 });
 
 function displayCard() {
-  cardHolder?.innerHTML = "";
+  if (cardHolder !== null) {
+    cardHolder.innerHTML = "";
+  }
   itemsArray.forEach((item: CardItem, i: number) => {
     createCard(item, i);
     likedOrNot(item);
