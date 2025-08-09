@@ -35,17 +35,30 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
     }
 };
 var cardHolder = document.querySelector("#displayHolder");
+var loadMore = document.querySelector("#loadMore");
 var itemsArray = [];
-function getInitialData() {
-    return __awaiter(this, void 0, void 0, function () {
+var CardItem = /** @class */ (function () {
+    function CardItem(name, id, picture, location, description) {
+        ((this.name = name),
+            (this.id = id),
+            (this.picture = picture),
+            (this.location = location),
+            (this.description = description),
+            (this.liked = false));
+    }
+    return CardItem;
+}());
+function getData() {
+    return __awaiter(this, arguments, void 0, function (num) {
         var i, res, data, item;
+        if (num === void 0) { num = 1; }
         return __generator(this, function (_a) {
             switch (_a.label) {
                 case 0:
-                    i = 1;
+                    i = num;
                     _a.label = 1;
                 case 1:
-                    if (!(i <= 10)) return [3 /*break*/, 5];
+                    if (!(i <= num + 9)) return [3 /*break*/, 5];
                     return [4 /*yield*/, fetch("https://botw-compendium.herokuapp.com/api/v3/compendium/entry/".concat(i))];
                 case 2:
                     res = _a.sent();
@@ -63,19 +76,12 @@ function getInitialData() {
         });
     });
 }
-console.log(itemsArray.length);
-var CardItem = /** @class */ (function () {
-    function CardItem(name, id, picture, location, description) {
-        ((this.name = name),
-            (this.id = id),
-            (this.picture = picture),
-            (this.location = location),
-            (this.description = description),
-            (this.liked = false));
-    }
-    return CardItem;
-}());
+loadMore === null || loadMore === void 0 ? void 0 : loadMore.addEventListener("click", function () {
+    var current = itemsArray.length + 1;
+    getData(current).then(displayCard);
+});
 function displayCard() {
+    cardHolder.innerHTML = "";
     itemsArray.forEach(function (item, i) {
         createCard(item, i);
         likedOrNot(item);
@@ -104,4 +110,4 @@ function createCard(item, itemIndex) {
     zeldaDiv.innerHTML = "\n            <div class=\"zeldaHeadInfo\">\n              <div class=\"img_wrapper\">\n                <img\n                  src=\"".concat(item.picture, "\"\n                  alt=\"").concat(item.name, "\"\n                />\n              </div>\n              <div class=\"zeldaItemDesc\">\n                <h4>").concat(item.name, "</h4>\n                <p>\n                  <strong>Located at:</strong>\n                  <br />\n                  ").concat((item === null || item === void 0 ? void 0 : item.location) || "No Location", "\n                </p>\n                <div class=\"itemDescInternal\">\n                  <p>ID: ").concat(item.id, "</p>\n                  <i class=\"fa-regular fa-heart\"></i>\n                </div>\n              </div>\n            </div>\n            <hr />\n            <div class=\"zeldaInfo\">\n              <p>\n                \"").concat(item.description, "\"\n              </p>\n            </div>\n");
     cardHolder === null || cardHolder === void 0 ? void 0 : cardHolder.appendChild(zeldaDiv);
 }
-getInitialData().then(displayCard);
+getData().then(displayCard);

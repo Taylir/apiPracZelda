@@ -1,24 +1,7 @@
 const cardHolder = document.querySelector<HTMLDivElement>("#displayHolder");
+const loadMore = document.querySelector("#loadMore");
 
 const itemsArray: Array<CardItem> = [];
-
-async function getInitialData() {
-  for (let i = 1; i <= 10; i++) {
-    const res = await fetch(
-      `https://botw-compendium.herokuapp.com/api/v3/compendium/entry/${i}`,
-    );
-    const { data } = await res.json();
-
-    const item = new CardItem(
-      data.name,
-      data.id,
-      data.image,
-      data.common_locations,
-      data.description,
-    );
-    itemsArray.push(item);
-  }
-}
 
 class CardItem {
   name: string;
@@ -44,7 +27,31 @@ class CardItem {
   }
 }
 
+async function getData(num = 1) {
+  for (let i = num; i <= num + 9; i++) {
+    const res = await fetch(
+      `https://botw-compendium.herokuapp.com/api/v3/compendium/entry/${i}`,
+    );
+    const { data } = await res.json();
+
+    const item = new CardItem(
+      data.name,
+      data.id,
+      data.image,
+      data.common_locations,
+      data.description,
+    );
+    itemsArray.push(item);
+  }
+}
+
+loadMore?.addEventListener("click", () => {
+  const current: number = itemsArray.length + 1;
+  getData(current).then(displayCard);
+});
+
 function displayCard() {
+  cardHolder?.innerHTML = "";
   itemsArray.forEach((item: CardItem, i: number) => {
     createCard(item, i);
     likedOrNot(item);
@@ -102,4 +109,4 @@ function createCard(item: CardItem, itemIndex: number): void {
   cardHolder?.appendChild(zeldaDiv);
 }
 
-getInitialData().then(displayCard);
+getData().then(displayCard);
