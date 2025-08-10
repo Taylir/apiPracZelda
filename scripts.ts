@@ -27,7 +27,7 @@ class CardItem {
   }
 }
 
-async function getData(num = 1) {
+/*async function getData(num = 1) {
   for (let i = num; i <= num + 9; i++) {
     const res = await fetch(
       `https://botw-compendium.herokuapp.com/api/v3/compendium/entry/${i}`,
@@ -43,7 +43,7 @@ async function getData(num = 1) {
     );
     itemsArray.push(item);
   }
-}
+}*/
 
 loadMore?.addEventListener("click", () => {
   const current: number = itemsArray.length + 1;
