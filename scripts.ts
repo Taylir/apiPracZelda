@@ -93,7 +93,7 @@ function createCard(item: CardItem, itemIndex: number): void {
                 <p>
                   <strong>Located at:</strong>
                   <br />
-                  ${item?.location || "No Location"}
+                  ${item?.location.split(", ") || "No Location"}
                 </p>
                 <div class="itemDescInternal">
                   <p>ID: ${item.id}</p>
