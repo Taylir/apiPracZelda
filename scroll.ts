@@ -5,6 +5,6 @@ const scrollCheck = window.addEventListener("scroll", () => {
   const height = window.innerHeight;
   let scrollPos = window.scrollY;
   if (scrollPos > height && navBar) {
-    navBar.style.backgroundColor = "#aac878";
+    navBar.classList.toggle("scrollNav");
   }
 });

@@ -1,3 +1,5 @@
+import { testData } from "./testData";
+
 const cardHolder = document.querySelector<HTMLDivElement>("#displayHolder");
 const loadMore = document.querySelector("#loadMore");
 
@@ -27,23 +29,38 @@ class CardItem {
   }
 }
 
-/*async function getData(num = 1) {
-  for (let i = num; i <= num + 9; i++) {
-    const res = await fetch(
-      `https://botw-compendium.herokuapp.com/api/v3/compendium/entry/${i}`,
-    );
-    const { data } = await res.json();
+async function getData(num = 1) {
+  const useAPI = true;
+  if (useAPI) {
+    for (let i = num; i <= num + 9; i++) {
+      const res = await fetch(
+        `https://botw-compendium.herokuapp.com/api/v3/compendium/entry/${i}`,
+      );
+      const { data } = await res.json();
 
-    const item = new CardItem(
-      data.name,
-      data.id,
-      data.image,
-      data.common_locations,
-      data.description,
-    );
-    itemsArray.push(item);
+      const item = new CardItem(
+        data.name,
+        data.id,
+        data.image,
+        data.common_locations,
+        data.description,
+      );
+      itemsArray.push(item);
+    }
+  } else {
+    const data = testData;
+    data.forEach((item) => {
+      const card = new CardItem(
+        item.name,
+        item.id,
+        item.image,
+        item.common_locations,
+        item.description,
+      );
+      itemsArray.push(card);
+    });
   }
-}*/
+}
 
 loadMore?.addEventListener("click", () => {
   const current: number = itemsArray.length + 1;
@@ -93,7 +110,7 @@ function createCard(item: CardItem, itemIndex: number): void {
                 <p>
                   <strong>Located at:</strong>
                   <br />
-                  ${item?.location.split(", ") || "No Location"}
+                  ${item?.location || "No Location"}
                 </p>
                 <div class="itemDescInternal">
                   <p>ID: ${item.id}</p>
