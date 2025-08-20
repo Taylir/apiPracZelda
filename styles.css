@@ -27,19 +27,22 @@ nav,
 .scrollNav {
   position: fixed;
   top: 0;
-  height: 80px;
   width: 100%;
   padding: 0 24px;
   clip-path: inset(0 -100vmax);
   box-shadow: 2px 0 0 100vmax var(--nav-color);
-  background-color: var(--nav-color);
   transition: all 300ms ease-in-out;
   z-index: 1;
 }
 
+nav {
+  height: 80px;
+  background-color: var(--nav-color);
+}
+
 .scrollNav {
   height: 50px;
-  background-color: #18662e;
+  background: linear-gradient(to bottom, #18662e, #27667b);
 }
 
 nav .container {
@@ -58,6 +61,12 @@ nav .img_wrapper {
   width: 60px;
   border-radius: 50%;
   overflow: hidden;
+  transition: all 300ms ease-in-out;
+}
+
+nav.scrollNav .img_wrapper {
+  height: 40px;
+  width: 40px;
 }
 
 nav .img_wrapper img {
@@ -133,6 +142,11 @@ nav .img_wrapper img:hover {
   margin-top: -50px;
   top: 70px;
   z-index: 1;
+  transition: 300ms all ease-in-out;
+}
+
+#filterBar.scrolled {
+  top: 50px;
 }
 
 #filterBar ul {

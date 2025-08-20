@@ -1,4 +1,124 @@
-import { testData } from "./testData";
+const testData = [
+  {
+    data: {
+      category: "creatures",
+      common_locations: ["Hyrule Field", "West Necluda"],
+      description:
+        "These medium-sized beasts can be found all throughout Hyrule. you can most often find them foraging for food in forests or meadows. Although usually docile, they won't hesitate to charge you full force if you get too close.",
+      dlc: false,
+      drops: ["raw meat"],
+      edible: false,
+      id: 11,
+      image:
+        "https://botw-compendium.herokuapp.com/api/v3/compendium/entry/woodland_boar/image?game=totk",
+      name: "woodland boar",
+    },
+    message: "",
+    status: 200,
+  },
+  {
+    data: {
+      category: "creatures",
+      common_locations: ["Hyrule Field", "West Necluda"],
+      description:
+        "These medium-sized beasts can be found all throughout Hyrule. you can most often find them foraging for food in forests or meadows. Although usually docile, they won't hesitate to charge you full force if you get too close.",
+      dlc: false,
+      drops: ["raw meat"],
+      edible: false,
+      id: 11,
+      image:
+        "https://botw-compendium.herokuapp.com/api/v3/compendium/entry/woodland_boar/image?game=totk",
+      name: "woodland boar",
+    },
+    message: "",
+    status: 200,
+  },
+  {
+    data: {
+      category: "creatures",
+      common_locations: ["Hyrule Field", "West Necluda"],
+      description:
+        "These medium-sized beasts can be found all throughout Hyrule. you can most often find them foraging for food in forests or meadows. Although usually docile, they won't hesitate to charge you full force if you get too close.",
+      dlc: false,
+      drops: ["raw meat"],
+      edible: false,
+      id: 11,
+      image:
+        "https://botw-compendium.herokuapp.com/api/v3/compendium/entry/woodland_boar/image?game=totk",
+      name: "woodland boar",
+    },
+    message: "",
+    status: 200,
+  },
+  {
+    data: {
+      category: "creatures",
+      common_locations: ["Hyrule Field", "West Necluda"],
+      description:
+        "These medium-sized beasts can be found all throughout Hyrule. you can most often find them foraging for food in forests or meadows. Although usually docile, they won't hesitate to charge you full force if you get too close.",
+      dlc: false,
+      drops: ["raw meat"],
+      edible: false,
+      id: 11,
+      image:
+        "https://botw-compendium.herokuapp.com/api/v3/compendium/entry/woodland_boar/image?game=totk",
+      name: "woodland boar",
+    },
+    message: "",
+    status: 200,
+  },
+  {
+    data: {
+      category: "creatures",
+      common_locations: ["Hyrule Field", "West Necluda"],
+      description:
+        "These medium-sized beasts can be found all throughout Hyrule. you can most often find them foraging for food in forests or meadows. Although usually docile, they won't hesitate to charge you full force if you get too close.",
+      dlc: false,
+      drops: ["raw meat"],
+      edible: false,
+      id: 11,
+      image:
+        "https://botw-compendium.herokuapp.com/api/v3/compendium/entry/woodland_boar/image?game=totk",
+      name: "woodland boar",
+    },
+    message: "",
+    status: 200,
+  },
+  {
+    data: {
+      category: "creatures",
+      common_locations: ["Hyrule Field", "West Necluda"],
+      description:
+        "These medium-sized beasts can be found all throughout Hyrule. you can most often find them foraging for food in forests or meadows. Although usually docile, they won't hesitate to charge you full force if you get too close.",
+      dlc: false,
+      drops: ["raw meat"],
+      edible: false,
+      id: 11,
+      image:
+        "https://botw-compendium.herokuapp.com/api/v3/compendium/entry/woodland_boar/image?game=totk",
+      name: "woodland boar",
+    },
+    message: "",
+    status: 200,
+  },
+  {
+    data: {
+      category: "creatures",
+      common_locations: ["Hyrule Field", "West Necluda"],
+      description:
+        "These medium-sized beasts can be found all throughout Hyrule. you can most often find them foraging for food in forests or meadows. Although usually docile, they won't hesitate to charge you full force if you get too close.",
+      dlc: false,
+      drops: ["raw meat"],
+      edible: false,
+      id: 11,
+      image:
+        "https://botw-compendium.herokuapp.com/api/v3/compendium/entry/woodland_boar/image?game=totk",
+      name: "woodland boar",
+    },
+    message: "",
+    status: 200,
+  },
+];
 
 const cardHolder = document.querySelector<HTMLDivElement>("#displayHolder");
 const loadMore = document.querySelector("#loadMore");
@@ -30,7 +150,7 @@ class CardItem {
 }
 
 async function getData(num = 1) {
-  const useAPI = true;
+  const useAPI = false;
   if (useAPI) {
     for (let i = num; i <= num + 9; i++) {
       const res = await fetch(
@@ -48,14 +168,13 @@ async function getData(num = 1) {
       itemsArray.push(item);
     }
   } else {
-    const data = testData;
-    data.forEach((item) => {
+    testData.forEach(({ data }) => {
       const card = new CardItem(
-        item.name,
-        item.id,
-        item.image,
-        item.common_locations,
-        item.description,
+        data.name,
+        data.id,
+        data.image,
+        data.common_locations,
+        data.description,
       );
       itemsArray.push(card);
     });

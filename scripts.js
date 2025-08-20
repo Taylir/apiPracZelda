@@ -1,4 +1,3 @@
-"use strict";
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
     function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
     return new (P || (P = Promise))(function (resolve, reject) {
@@ -35,8 +34,113 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
         if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
     }
 };
-Object.defineProperty(exports, "__esModule", { value: true });
-var testData_1 = require("./testData");
+var testData = [
+    {
+        data: {
+            category: "creatures",
+            common_locations: ["Hyrule Field", "West Necluda"],
+            description: "These medium-sized beasts can be found all throughout Hyrule. you can most often find them foraging for food in forests or meadows. Although usually docile, they won't hesitate to charge you full force if you get too close.",
+            dlc: false,
+            drops: ["raw meat"],
+            edible: false,
+            id: 11,
+            image: "https://botw-compendium.herokuapp.com/api/v3/compendium/entry/woodland_boar/image?game=totk",
+            name: "woodland boar",
+        },
+        message: "",
+        status: 200,
+    },
+    {
+        data: {
+            category: "creatures",
+            common_locations: ["Hyrule Field", "West Necluda"],
+            description: "These medium-sized beasts can be found all throughout Hyrule. you can most often find them foraging for food in forests or meadows. Although usually docile, they won't hesitate to charge you full force if you get too close.",
+            dlc: false,
+            drops: ["raw meat"],
+            edible: false,
+            id: 11,
+            image: "https://botw-compendium.herokuapp.com/api/v3/compendium/entry/woodland_boar/image?game=totk",
+            name: "woodland boar",
+        },
+        message: "",
+        status: 200,
+    },
+    {
+        data: {
+            category: "creatures",
+            common_locations: ["Hyrule Field", "West Necluda"],
+            description: "These medium-sized beasts can be found all throughout Hyrule. you can most often find them foraging for food in forests or meadows. Although usually docile, they won't hesitate to charge you full force if you get too close.",
+            dlc: false,
+            drops: ["raw meat"],
+            edible: false,
+            id: 11,
+            image: "https://botw-compendium.herokuapp.com/api/v3/compendium/entry/woodland_boar/image?game=totk",
+            name: "woodland boar",
+        },
+        message: "",
+        status: 200,
+    },
+    {
+        data: {
+            category: "creatures",
+            common_locations: ["Hyrule Field", "West Necluda"],
+            description: "These medium-sized beasts can be found all throughout Hyrule. you can most often find them foraging for food in forests or meadows. Although usually docile, they won't hesitate to charge you full force if you get too close.",
+            dlc: false,
+            drops: ["raw meat"],
+            edible: false,
+            id: 11,
+            image: "https://botw-compendium.herokuapp.com/api/v3/compendium/entry/woodland_boar/image?game=totk",
+            name: "woodland boar",
+        },
+        message: "",
+        status: 200,
+    },
+    {
+        data: {
+            category: "creatures",
+            common_locations: ["Hyrule Field", "West Necluda"],
+            description: "These medium-sized beasts can be found all throughout Hyrule. you can most often find them foraging for food in forests or meadows. Although usually docile, they won't hesitate to charge you full force if you get too close.",
+            dlc: false,
+            drops: ["raw meat"],
+            edible: false,
+            id: 11,
+            image: "https://botw-compendium.herokuapp.com/api/v3/compendium/entry/woodland_boar/image?game=totk",
+            name: "woodland boar",
+        },
+        message: "",
+        status: 200,
+    },
+    {
+        data: {
+            category: "creatures",
+            common_locations: ["Hyrule Field", "West Necluda"],
+            description: "These medium-sized beasts can be found all throughout Hyrule. you can most often find them foraging for food in forests or meadows. Although usually docile, they won't hesitate to charge you full force if you get too close.",
+            dlc: false,
+            drops: ["raw meat"],
+            edible: false,
+            id: 11,
+            image: "https://botw-compendium.herokuapp.com/api/v3/compendium/entry/woodland_boar/image?game=totk",
+            name: "woodland boar",
+        },
+        message: "",
+        status: 200,
+    },
+    {
+        data: {
+            category: "creatures",
+            common_locations: ["Hyrule Field", "West Necluda"],
+            description: "These medium-sized beasts can be found all throughout Hyrule. you can most often find them foraging for food in forests or meadows. Although usually docile, they won't hesitate to charge you full force if you get too close.",
+            dlc: false,
+            drops: ["raw meat"],
+            edible: false,
+            id: 11,
+            image: "https://botw-compendium.herokuapp.com/api/v3/compendium/entry/woodland_boar/image?game=totk",
+            name: "woodland boar",
+        },
+        message: "",
+        status: 200,
+    },
+];
 var cardHolder = document.querySelector("#displayHolder");
 var loadMore = document.querySelector("#loadMore");
 var itemsArray = [];
@@ -53,12 +157,12 @@ var CardItem = /** @class */ (function () {
 }());
 function getData() {
     return __awaiter(this, arguments, void 0, function (num) {
-        var useAPI, i, res, data, item, data;
+        var useAPI, i, res, data, item;
         if (num === void 0) { num = 1; }
         return __generator(this, function (_a) {
             switch (_a.label) {
                 case 0:
-                    useAPI = true;
+                    useAPI = false;
                     if (!useAPI) return [3 /*break*/, 6];
                     i = num;
                     _a.label = 1;
@@ -78,9 +182,9 @@ function getData() {
                     return [3 /*break*/, 1];
                 case 5: return [3 /*break*/, 7];
                 case 6:
-                    data = testData_1.testData;
-                    data.forEach(function (item) {
-                        var card = new CardItem(item.name, item.id, item.image, item.common_locations, item.description);
+                    testData.forEach(function (_a) {
+                        var data = _a.data;
+                        var card = new CardItem(data.name, data.id, data.image, data.common_locations, data.description);
                         itemsArray.push(card);
                     });
                     _a.label = 7;
