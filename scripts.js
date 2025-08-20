@@ -145,16 +145,25 @@ var cardHolder = document.querySelector("#displayHolder");
 var loadMore = document.querySelector("#loadMore");
 var itemsArray = [];
 var CardItem = /** @class */ (function () {
-    function CardItem(name, id, picture, location, description) {
+    function CardItem(name, id, picture, location, description, category) {
         ((this.name = name),
             (this.id = id),
             (this.picture = picture),
             (this.location = location),
             (this.description = description),
+            (this.category = category),
             (this.liked = false));
     }
     return CardItem;
 }());
+function checkLocal() {
+    var _a;
+    var stringArr = JSON.stringify(itemsArray);
+    localStorage.setItem("data", stringArr);
+    var returnData = (_a = localStorage.getItem("data")) !== null && _a !== void 0 ? _a : "";
+    var parsedData = JSON.parse((returnData));
+    console.log(parsedData.length);
+}
 function getData() {
     return __awaiter(this, arguments, void 0, function (num) {
         var useAPI, i, res, data, item;
@@ -174,19 +183,22 @@ function getData() {
                     return [4 /*yield*/, res.json()];
                 case 3:
                     data = (_a.sent()).data;
-                    item = new CardItem(data.name, data.id, data.image, data.common_locations, data.description);
+                    item = new CardItem(data.name, data.id, data.image, data.common_locations, data.description, data.category);
                     itemsArray.push(item);
                     _a.label = 4;
                 case 4:
                     i++;
                     return [3 /*break*/, 1];
-                case 5: return [3 /*break*/, 7];
+                case 5:
+                    checkLocal();
+                    return [3 /*break*/, 7];
                 case 6:
                     testData.forEach(function (_a) {
                         var data = _a.data;
-                        var card = new CardItem(data.name, data.id, data.image, data.common_locations, data.description);
+                        var card = new CardItem(data.name, data.id, data.image, data.common_locations, data.description, data.category);
                         itemsArray.push(card);
                     });
+                    checkLocal();
                     _a.label = 7;
                 case 7: return [2 /*return*/];
             }

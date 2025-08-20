@@ -132,6 +132,7 @@ class CardItem {
   location: string;
   description: string;
   liked: boolean;
+  category: string;
 
   constructor(
     name: string,
@@ -139,14 +140,34 @@ class CardItem {
     picture: string,
     location: string,
     description: string,
+    category: string,
   ) {
     ((this.name = name),
       (this.id = id),
       (this.picture = picture),
       (this.location = location),
       (this.description = description),
+      (this.category = category),
       (this.liked = false));
   }
+}
+
+function getLocalLength() {
+  const data = localStorage.getItem("data") ?? "";
+  if (!data) return 1;
+  const parsed = JSON.parse(data);
+  return parsed.length
+}
+
+function setLocalStorage() {
+  const stringArr = JSON.stringify(itemsArray);
+  localStorage.setItem("data", stringArr);
+}
+
+function getLocalStorage() {
+  const data = localStorage.getItem("data") ?? "";
+  const parsed = JSON.parse(data)
+  itemsArray.push(...parsed);
 }
 
 async function getData(num = 1) {
@@ -164,6 +185,7 @@ async function getData(num = 1) {
         data.image,
         data.common_locations,
         data.description,
+        data.category,
       );
       itemsArray.push(item);
     }
@@ -175,6 +197,7 @@ async function getData(num = 1) {
         data.image,
         data.common_locations,
         data.description,
+        data.category,
       );
       itemsArray.push(card);
     });
