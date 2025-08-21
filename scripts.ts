@@ -57,6 +57,8 @@ async function getFirstTen() {
     try {
       const resp = await Promise.all(firstTen.map((url) => fetch(url)));
       const retData = await Promise.all(resp.map((res) => res.json()));
+      console.log(retData);
+
       retData.map(({ data }) => {
         const card = new CardItem(
           data.name,
@@ -75,33 +77,44 @@ async function getFirstTen() {
     setLocalStorage();
   }
 }
-async function getData(num = 1) {
-  for (let i = num; i <= num + 9; i++) {
+/*async function getRestOfData() {
+  let count = itemsArray.length + 1;
+  while (true) {
+    if (count === 100) break;
     const res = await fetch(
-      `https://botw-compendium.herokuapp.com/api/v3/compendium/entry/${i}`,
+      `https://botw-compendium.herokuapp.com/api/v3/compendium/entry/${count}`,
     );
-    const { data } = await res.json();
-
-    const item = new CardItem(
-      data.name,
-      data.id,
-      data.image,
-      data.common_locations,
-      data.description,
-      data.category,
-    );
-    itemsArray.push(item);
+    const data = await res.json();
+    if (data.status !== 200) {
+      break;
+    } else {
+      const item = new CardItem(
+        data.data.name,
+        data.data.id,
+        data.data.image,
+        data.data.common_locations,
+        data.data.description,
+        data.data.category,
+      );
+      itemsArray.push(item);
+      count++;
+    }
   }
 }
 
-loadMore?.addEventListener("click", () => {
+getRestOfData().then(() => {
+  setLocalStorage();
+});
+*/
+
+/*loadMore?.addEventListener("click", () => {
   const current: number = itemsArray.length + 1;
   getData(current).then(() => {
     displayCard();
     setLocalStorage();
   });
 });
-
+*/
 function displayCard() {
   if (cardHolder !== null) {
     cardHolder.innerHTML = "";

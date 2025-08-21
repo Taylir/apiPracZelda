@@ -89,6 +89,7 @@ function getFirstTen() {
                     return [4 /*yield*/, Promise.all(resp.map(function (res) { return res.json(); }))];
                 case 4:
                     retData = _a.sent();
+                    console.log(retData);
                     retData.map(function (_a) {
                         var data = _a.data;
                         var card = new CardItem(data.name, data.id, data.image, data.common_locations, data.description, data.category);
@@ -108,41 +109,43 @@ function getFirstTen() {
         });
     });
 }
-function getData() {
-    return __awaiter(this, arguments, void 0, function (num) {
-        var i, res, data, item;
-        if (num === void 0) { num = 1; }
-        return __generator(this, function (_a) {
-            switch (_a.label) {
-                case 0:
-                    i = num;
-                    _a.label = 1;
-                case 1:
-                    if (!(i <= num + 9)) return [3 /*break*/, 5];
-                    return [4 /*yield*/, fetch("https://botw-compendium.herokuapp.com/api/v3/compendium/entry/".concat(i))];
-                case 2:
-                    res = _a.sent();
-                    return [4 /*yield*/, res.json()];
-                case 3:
-                    data = (_a.sent()).data;
-                    item = new CardItem(data.name, data.id, data.image, data.common_locations, data.description, data.category);
-                    itemsArray.push(item);
-                    _a.label = 4;
-                case 4:
-                    i++;
-                    return [3 /*break*/, 1];
-                case 5: return [2 /*return*/];
-            }
-        });
-    });
+/*async function getRestOfData() {
+  let count = itemsArray.length + 1;
+  while (true) {
+    if (count === 100) break;
+    const res = await fetch(
+      `https://botw-compendium.herokuapp.com/api/v3/compendium/entry/${count}`,
+    );
+    const data = await res.json();
+    if (data.status !== 200) {
+      break;
+    } else {
+      const item = new CardItem(
+        data.data.name,
+        data.data.id,
+        data.data.image,
+        data.data.common_locations,
+        data.data.description,
+        data.data.category,
+      );
+      itemsArray.push(item);
+      count++;
+    }
+  }
 }
-loadMore === null || loadMore === void 0 ? void 0 : loadMore.addEventListener("click", function () {
-    var current = itemsArray.length + 1;
-    getData(current).then(function () {
-        displayCard();
-        setLocalStorage();
-    });
+
+getRestOfData().then(() => {
+  setLocalStorage();
 });
+*/
+/*loadMore?.addEventListener("click", () => {
+  const current: number = itemsArray.length + 1;
+  getData(current).then(() => {
+    displayCard();
+    setLocalStorage();
+  });
+});
+*/
 function displayCard() {
     if (cardHolder !== null) {
         cardHolder.innerHTML = "";
