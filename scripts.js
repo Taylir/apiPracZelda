@@ -110,13 +110,11 @@ function getFirstTen() {
 }
 function getData() {
     return __awaiter(this, arguments, void 0, function (num) {
-        var useAPI, i, res, data, item;
+        var i, res, data, item;
         if (num === void 0) { num = 1; }
         return __generator(this, function (_a) {
             switch (_a.label) {
                 case 0:
-                    useAPI = false;
-                    if (!useAPI) return [3 /*break*/, 5];
                     i = num;
                     _a.label = 1;
                 case 1:
@@ -140,7 +138,10 @@ function getData() {
 }
 loadMore === null || loadMore === void 0 ? void 0 : loadMore.addEventListener("click", function () {
     var current = itemsArray.length + 1;
-    getData(current).then(displayCard);
+    getData(current).then(function () {
+        displayCard();
+        setLocalStorage();
+    });
 });
 function displayCard() {
     if (cardHolder !== null) {

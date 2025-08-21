@@ -76,30 +76,30 @@ async function getFirstTen() {
   }
 }
 async function getData(num = 1) {
-  const useAPI = false;
-  if (useAPI) {
-    for (let i = num; i <= num + 9; i++) {
-      const res = await fetch(
-        `https://botw-compendium.herokuapp.com/api/v3/compendium/entry/${i}`,
-      );
-      const { data } = await res.json();
+  for (let i = num; i <= num + 9; i++) {
+    const res = await fetch(
+      `https://botw-compendium.herokuapp.com/api/v3/compendium/entry/${i}`,
+    );
+    const { data } = await res.json();
 
-      const item = new CardItem(
-        data.name,
-        data.id,
-        data.image,
-        data.common_locations,
-        data.description,
-        data.category,
-      );
-      itemsArray.push(item);
-    }
+    const item = new CardItem(
+      data.name,
+      data.id,
+      data.image,
+      data.common_locations,
+      data.description,
+      data.category,
+    );
+    itemsArray.push(item);
   }
 }
 
 loadMore?.addEventListener("click", () => {
   const current: number = itemsArray.length + 1;
-  getData(current).then(displayCard);
+  getData(current).then(() => {
+    displayCard();
+    setLocalStorage();
+  });
 });
 
 function displayCard() {
