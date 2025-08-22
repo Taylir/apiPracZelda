@@ -41,71 +41,23 @@ function getLocalStorage() {
   return parsedData;
 }
 
-async function getFirstTen() {
-  if (getLocalStorage() !== null) {
-    const localData = getLocalStorage();
-    for (const item of localData) {
-      itemsArray.push(item);
-    }
-    console.log("Got data from storage");
-  } else {
-    const firstTen: Array<string> = [];
-    for (let i = 1; i <= 10; i++) {
-      const url = `https://botw-compendium.herokuapp.com/api/v3/compendium/entry/${i}`;
-      firstTen.push(url);
-    }
-    try {
-      const resp = await Promise.all(firstTen.map((url) => fetch(url)));
-      const retData = await Promise.all(resp.map((res) => res.json()));
-      console.log(retData);
-
-      retData.map(({ data }) => {
-        const card = new CardItem(
-          data.name,
-          data.id,
-          data.image,
-          data.common_locations,
-          data.description,
-          data.category,
-        );
-        itemsArray.push(card);
-      });
-    } catch (error) {
-      console.error("Error fetching data", error);
-    }
-    console.log("Got Data from api");
-    setLocalStorage();
-  }
-}
-/*async function getRestOfData() {
-  let count = itemsArray.length + 1;
-  while (true) {
-    if (count === 100) break;
-    const res = await fetch(
-      `https://botw-compendium.herokuapp.com/api/v3/compendium/entry/${count}`,
+async function getAllData() {
+  const resp = await fetch(
+    "https://botw-compendium.herokuapp.com/api/v3/compendium/all",
+  );
+  const { data } = await resp.json();
+  for (const item of data) {
+    const card = new CardItem(
+      item.name,
+      item.id,
+      item.image,
+      item.common_locations,
+      item.description,
+      item.category,
     );
-    const data = await res.json();
-    if (data.status !== 200) {
-      break;
-    } else {
-      const item = new CardItem(
-        data.data.name,
-        data.data.id,
-        data.data.image,
-        data.data.common_locations,
-        data.data.description,
-        data.data.category,
-      );
-      itemsArray.push(item);
-      count++;
-    }
+    itemsArray.push(card);
   }
 }
-
-getRestOfData().then(() => {
-  setLocalStorage();
-});
-*/
 
 /*loadMore?.addEventListener("click", () => {
   const current: number = itemsArray.length + 1;
@@ -175,5 +127,3 @@ function createCard(item: CardItem, itemIndex: number): void {
 `;
   cardHolder?.appendChild(zeldaDiv);
 }
-
-getFirstTen().then(displayCard);
