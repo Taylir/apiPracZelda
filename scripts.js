@@ -62,17 +62,40 @@ function getLocalStorage() {
 }
 function getAllData() {
     return __awaiter(this, void 0, void 0, function () {
-        var resp, data;
-        return __generator(this, function (_a) {
-            switch (_a.label) {
-                case 0: return [4 /*yield*/, fetch("https://botw-compendium.herokuapp.com/api/v3/compendium/all")];
+        var localData, _i, localData_1, card, resp, data, _a, data_1, item, card;
+        return __generator(this, function (_b) {
+            switch (_b.label) {
+                case 0:
+                    localData = getLocalStorage();
+                    if (!(localData.length === 389)) return [3 /*break*/, 1];
+                    console.log("Got data from the storage");
+                    for (_i = 0, localData_1 = localData; _i < localData_1.length; _i++) {
+                        card = localData_1[_i];
+                        itemsArray.push(card);
+                        if (card.id === 10)
+                            displayCard();
+                    }
+                    console.log(cardHolder === null || cardHolder === void 0 ? void 0 : cardHolder.childElementCount);
+                    return [3 /*break*/, 4];
                 case 1:
-                    resp = _a.sent();
-                    return [4 /*yield*/, resp.json()];
+                    console.log("Got data from the api");
+                    return [4 /*yield*/, fetch("https://botw-compendium.herokuapp.com/api/v3/compendium/all")];
                 case 2:
-                    data = _a.sent();
-                    console.log(data);
-                    return [2 /*return*/];
+                    resp = _b.sent();
+                    return [4 /*yield*/, resp.json()];
+                case 3:
+                    data = (_b.sent()).data;
+                    for (_a = 0, data_1 = data; _a < data_1.length; _a++) {
+                        item = data_1[_a];
+                        card = new CardItem(item.name, item.id, item.image, item.common_locations, item.description, item.category);
+                        itemsArray.push(card);
+                        if (item.id === 10) {
+                            displayCard();
+                        }
+                    }
+                    setLocalStorage();
+                    _b.label = 4;
+                case 4: return [2 /*return*/];
             }
         });
     });
@@ -109,6 +132,7 @@ function likedOrNot(item) {
             thisHeart.classList.add("fa-regular");
             item.liked = false;
         }
+        console.log("Item: ".concat(item.id, ", Liked: ").concat(item.liked));
     });
 }
 function createCard(item, itemIndex) {

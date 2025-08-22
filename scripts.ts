@@ -1,5 +1,5 @@
 const cardHolder = document.querySelector<HTMLDivElement>("#displayHolder");
-const loadMore = document.querySelector("#loadMore");
+const loadMore = document.querySelector<HTMLButtonElement>("#loadMore");
 
 const itemsArray: Array<CardItem> = [];
 
@@ -42,22 +42,40 @@ function getLocalStorage() {
 }
 
 async function getAllData() {
-  const resp = await fetch(
-    "https://botw-compendium.herokuapp.com/api/v3/compendium/all",
-  );
-  const { data } = await resp.json();
-  for (const item of data) {
-    const card = new CardItem(
-      item.name,
-      item.id,
-      item.image,
-      item.common_locations,
-      item.description,
-      item.category,
+  const localData: CardItem[] = getLocalStorage();
+  if (localData.length === 389) {
+    console.log("Got data from the storage");
+    for (const card of localData) {
+      itemsArray.push(card);
+      if (card.id === 10) displayCard();
+    }
+    console.log(cardHolder?.childElementCount);
+  } else {
+    console.log("Got data from the api");
+
+    const resp = await fetch(
+      "https://botw-compendium.herokuapp.com/api/v3/compendium/all",
     );
-    itemsArray.push(card);
+    const { data } = await resp.json();
+    for (const item of data) {
+      const card = new CardItem(
+        item.name,
+        item.id,
+        item.image,
+        item.common_locations,
+        item.description,
+        item.category,
+      );
+      itemsArray.push(card);
+      if (item.id === 10) {
+        displayCard();
+      }
+    }
+    setLocalStorage();
   }
 }
+
+getAllData();
 
 /*loadMore?.addEventListener("click", () => {
   const current: number = itemsArray.length + 1;
@@ -90,6 +108,7 @@ function likedOrNot(item: CardItem) {
       thisHeart.classList.add("fa-regular");
       item.liked = false;
     }
+    console.log(`Item: ${item.id}, Liked: ${item.liked}`);
   });
 }
 
