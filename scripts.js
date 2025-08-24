@@ -49,12 +49,14 @@ var CardItem = /** @class */ (function () {
     }
     return CardItem;
 }());
-function setLocalStorage() {
-    localStorage.setItem("data", JSON.stringify(itemsArray));
+function setLocalStorage(data) {
+    if (data === void 0) { data = "data"; }
+    localStorage.setItem("".concat(data), JSON.stringify(itemsArray));
 }
-function getLocalStorage() {
+function getLocalStorage(data) {
     var _a;
-    var gottenData = (_a = localStorage.getItem("data")) !== null && _a !== void 0 ? _a : "";
+    if (data === void 0) { data = "data"; }
+    var gottenData = (_a = localStorage.getItem("".concat(data))) !== null && _a !== void 0 ? _a : "";
     if (gottenData == "")
         return null;
     var parsedData = JSON.parse(gottenData);

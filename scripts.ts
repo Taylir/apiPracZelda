@@ -30,12 +30,12 @@ class CardItem {
   }
 }
 
-function setLocalStorage() {
-  localStorage.setItem("data", JSON.stringify(itemsArray));
+function setLocalStorage(data: string = "data") {
+  localStorage.setItem(`${data}`, JSON.stringify(itemsArray));
 }
 
-function getLocalStorage() {
-  const gottenData = localStorage.getItem("data") ?? "";
+function getLocalStorage(data: string = "data") {
+  const gottenData = localStorage.getItem(`${data}`) ?? "";
   if (gottenData == "") return null;
   const parsedData = JSON.parse(gottenData);
   return parsedData;
