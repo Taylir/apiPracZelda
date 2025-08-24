@@ -157,7 +157,8 @@ nav .img_wrapper img:hover {
   list-style: none;
 }
 
-#filterBar ul li {
+#filterBar ul li button {
+  background-color: transparent;
   padding: 4px 8px;
   border-radius: 4px;
   border: 1px solid silver;
@@ -165,7 +166,7 @@ nav .img_wrapper img:hover {
   cursor: pointer;
 }
 
-#filterBar ul li:hover {
+#filterBar ul li button:hover {
   border-radius: 0;
   background-color: #57667b;
   opacity: 0.7;
