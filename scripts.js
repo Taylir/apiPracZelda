@@ -101,19 +101,18 @@ function getAllData() {
     });
 }
 getAllData();
-/*loadMore?.addEventListener("click", () => {
-  const current: number = itemsArray.length + 1;
-  getData(current).then(() => {
-    displayCard();
-    setLocalStorage();
-  });
+loadMore === null || loadMore === void 0 ? void 0 : loadMore.addEventListener("click", function () {
+    var _a;
+    var currentAmount = (_a = cardHolder === null || cardHolder === void 0 ? void 0 : cardHolder.childElementCount) !== null && _a !== void 0 ? _a : 0;
+    var wantedCards = itemsArray.slice(0, currentAmount + 10);
+    displayCard(wantedCards);
 });
-*/
-function displayCard() {
+function displayCard(arr) {
+    if (arr === void 0) { arr = itemsArray; }
     if (cardHolder !== null) {
         cardHolder.innerHTML = "";
     }
-    itemsArray.forEach(function (item, i) {
+    arr.forEach(function (item, i) {
         createCard(item, i);
         likedOrNot(item);
     });

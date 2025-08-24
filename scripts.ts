@@ -77,19 +77,17 @@ async function getAllData() {
 
 getAllData();
 
-/*loadMore?.addEventListener("click", () => {
-  const current: number = itemsArray.length + 1;
-  getData(current).then(() => {
-    displayCard();
-    setLocalStorage();
-  });
+loadMore?.addEventListener("click", () => {
+  const currentAmount: number = cardHolder?.childElementCount ?? 0;
+  const wantedCards: Array<CardItem> = itemsArray.slice(0, currentAmount + 10);
+  displayCard(wantedCards);
 });
-*/
-function displayCard() {
+
+function displayCard(arr: CardItem[] = itemsArray) {
   if (cardHolder !== null) {
     cardHolder.innerHTML = "";
   }
-  itemsArray.forEach((item: CardItem, i: number) => {
+  arr.forEach((item: CardItem, i: number) => {
     createCard(item, i);
     likedOrNot(item);
   });
