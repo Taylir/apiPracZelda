@@ -144,3 +144,8 @@ function createCard(item: CardItem, itemIndex: number): void {
 `;
   cardHolder?.appendChild(zeldaDiv);
 }
+
+const filterButtons = document.querySelectorAll(".filterButton");
+filterButtons.forEach((button) => {
+  button.addEventListener("click", (e: any) => console.log(e.target?.value));
+});
