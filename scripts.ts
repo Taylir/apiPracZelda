@@ -2,6 +2,7 @@ const cardHolder = document.querySelector<HTMLDivElement>("#displayHolder");
 const loadMore = document.querySelector<HTMLButtonElement>("#loadMore");
 
 const itemsArray: Array<CardItem> = [];
+let tempArray: Array<CardItem> = [];
 
 class CardItem {
   name: string;
@@ -37,13 +38,16 @@ function setLocalStorage(data: string = "data") {
 function getLocalStorage(data: string = "data") {
   const gottenData = localStorage.getItem(`${data}`) ?? "";
   if (gottenData == "") return null;
-  const parsedData = JSON.parse(gottenData);
+  const parsedData = JSON.parse(gottenData).sort(
+    (a: CardItem, b: CardItem) => a.id - b.id,
+  );
   return parsedData;
 }
 
 async function getAllData() {
-  const localData: CardItem[] = getLocalStorage();
-  if (localData.length === 389) {
+  const localData: CardItem[] = getLocalStorage("data");
+
+  if (localData.length >= 300) {
     console.log("Got data from the storage");
     for (const card of localData) {
       itemsArray.push(card);
@@ -74,8 +78,6 @@ async function getAllData() {
     setLocalStorage();
   }
 }
-
-getAllData();
 
 loadMore?.addEventListener("click", () => {
   const currentAmount: number = cardHolder?.childElementCount ?? 0;
@@ -146,6 +148,14 @@ function createCard(item: CardItem, itemIndex: number): void {
 }
 
 const filterButtons = document.querySelectorAll(".filterButton");
+function getFilterButton(value: string) {
+  tempArray = itemsArray.filter((item) => item.category === value);
+  console.log(tempArray);
+}
 filterButtons.forEach((button) => {
-  button.addEventListener("click", (e: any) => console.log(e.target?.value));
+  button.addEventListener("click", (e: any) =>
+    getFilterButton(e.target?.value),
+  );
 });
+
+getAllData();

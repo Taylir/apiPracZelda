@@ -37,6 +37,7 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
 var cardHolder = document.querySelector("#displayHolder");
 var loadMore = document.querySelector("#loadMore");
 var itemsArray = [];
+var tempArray = [];
 var CardItem = /** @class */ (function () {
     function CardItem(name, id, picture, location, description, category) {
         ((this.name = name),
@@ -59,7 +60,7 @@ function getLocalStorage(data) {
     var gottenData = (_a = localStorage.getItem("".concat(data))) !== null && _a !== void 0 ? _a : "";
     if (gottenData == "")
         return null;
-    var parsedData = JSON.parse(gottenData);
+    var parsedData = JSON.parse(gottenData).sort(function (a, b) { return a.id - b.id; });
     return parsedData;
 }
 function getAllData() {
@@ -68,8 +69,8 @@ function getAllData() {
         return __generator(this, function (_b) {
             switch (_b.label) {
                 case 0:
-                    localData = getLocalStorage();
-                    if (!(localData.length === 389)) return [3 /*break*/, 1];
+                    localData = getLocalStorage("data");
+                    if (!(localData.length >= 300)) return [3 /*break*/, 1];
                     console.log("Got data from the storage");
                     for (_i = 0, localData_1 = localData; _i < localData_1.length; _i++) {
                         card = localData_1[_i];
@@ -102,7 +103,6 @@ function getAllData() {
         });
     });
 }
-getAllData();
 loadMore === null || loadMore === void 0 ? void 0 : loadMore.addEventListener("click", function () {
     var _a;
     var currentAmount = (_a = cardHolder === null || cardHolder === void 0 ? void 0 : cardHolder.childElementCount) !== null && _a !== void 0 ? _a : 0;
@@ -144,6 +144,11 @@ function createCard(item, itemIndex) {
     cardHolder === null || cardHolder === void 0 ? void 0 : cardHolder.appendChild(zeldaDiv);
 }
 var filterButtons = document.querySelectorAll(".filterButton");
+function getFilterButton(value) {
+    tempArray = itemsArray.filter(function (item) { return item.category === value; });
+    console.log(tempArray);
+}
 filterButtons.forEach(function (button) {
-    button.addEventListener("click", function (e) { var _a, _b; return console.log((_b = (_a = e.target) === null || _a === void 0 ? void 0 : _a.value) !== null && _b !== void 0 ? _b : ""); });
+    button.addEventListener("click", function (e) { var _a; return getFilterButton((_a = e.target) === null || _a === void 0 ? void 0 : _a.value); });
 });
+getAllData();
