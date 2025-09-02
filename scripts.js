@@ -60,7 +60,7 @@ function getLocalStorage(data) {
     var gottenData = (_a = localStorage.getItem("".concat(data))) !== null && _a !== void 0 ? _a : "";
     if (gottenData == "")
         return null;
-    var parsedData = JSON.parse(gottenData).sort(function (a, b) { return a.id - b.id; });
+    var parsedData = JSON.parse(gottenData);
     return parsedData;
 }
 function getAllData() {
@@ -70,13 +70,13 @@ function getAllData() {
             switch (_b.label) {
                 case 0:
                     localData = getLocalStorage("data");
-                    if (!(localData.length >= 300)) return [3 /*break*/, 1];
+                    if (!((localData === null || localData === void 0 ? void 0 : localData.length) >= 300)) return [3 /*break*/, 1];
                     console.log("Got data from the storage");
                     for (_i = 0, localData_1 = localData; _i < localData_1.length; _i++) {
                         card = localData_1[_i];
                         itemsArray.push(card);
-                        if (card.id === 10)
-                            displayCard();
+                        if (itemsArray.length === 10)
+                            displayCard(itemsArray);
                     }
                     console.log(cardHolder === null || cardHolder === void 0 ? void 0 : cardHolder.childElementCount);
                     return [3 /*break*/, 4];
@@ -88,12 +88,13 @@ function getAllData() {
                     return [4 /*yield*/, resp.json()];
                 case 3:
                     data = (_b.sent()).data;
+                    data.sort(function (a, b) { return a.id - b.id; });
                     for (_a = 0, data_1 = data; _a < data_1.length; _a++) {
                         item = data_1[_a];
                         card = new CardItem(item.name, item.id, item.image, item.common_locations, item.description, item.category);
                         itemsArray.push(card);
-                        if (item.id === 10) {
-                            displayCard();
+                        if (itemsArray.length === 10) {
+                            displayCard(itemsArray);
                         }
                     }
                     setLocalStorage();
@@ -105,19 +106,20 @@ function getAllData() {
 }
 loadMore === null || loadMore === void 0 ? void 0 : loadMore.addEventListener("click", function () {
     var _a;
+    var usageArr = tempArray.length > 0 ? tempArray : itemsArray;
     var currentAmount = (_a = cardHolder === null || cardHolder === void 0 ? void 0 : cardHolder.childElementCount) !== null && _a !== void 0 ? _a : 0;
-    var wantedCards = itemsArray.slice(0, currentAmount + 10);
-    displayCard(wantedCards);
+    var wantedCards = usageArr.slice(0, currentAmount + 10);
+    displayCard(wantedCards, currentAmount + 10);
 });
-function displayCard(arr) {
-    if (arr === void 0) { arr = itemsArray; }
+function displayCard(arr, num) {
+    if (num === void 0) { num = 10; }
     if (cardHolder !== null) {
         cardHolder.innerHTML = "";
     }
-    arr.forEach(function (item, i) {
-        createCard(item, i);
-        likedOrNot(item);
-    });
+    for (var i = 0; i < num; i++) {
+        createCard(arr[i], i);
+        likedOrNot(arr[i]);
+    }
 }
 function likedOrNot(item) {
     var thisItem = document.querySelector("#zeldaItem-".concat(item.id));
@@ -140,13 +142,13 @@ function createCard(item, itemIndex) {
     var zeldaDiv = document.createElement("div");
     zeldaDiv.classList += "zeldaItem";
     zeldaDiv.id = "zeldaItem-".concat(item.id);
-    zeldaDiv.innerHTML = "\n            <div class=\"zeldaHeadInfo\">\n              <div class=\"img_wrapper\">\n                <img\n                  src=\"".concat(item.picture, "\"\n                  alt=\"").concat(item.name, "\"\n                />\n              </div>\n              <div class=\"zeldaItemDesc\">\n                <h4>").concat(item.name, "</h4>\n                <p>\n                  <strong>Located at:</strong>\n                  <br />\n                  ").concat((item === null || item === void 0 ? void 0 : item.location) || "No Location", "\n                </p>\n                <div class=\"itemDescInternal\">\n                  <p>ID: ").concat(item.id, "</p>\n                  <i class=\"fa-regular fa-heart\"></i>\n                </div>\n              </div>\n            </div>\n            <hr />\n            <div class=\"zeldaInfo\">\n              <p>\n                \"").concat(item.description, "\"\n              </p>\n            </div>\n");
+    zeldaDiv.innerHTML = "\n            <div class=\"zeldaHeadInfo\">\n              <div class=\"img_wrapper\">\n                <img\n                  src=\"".concat(item.picture, "\"\n                  alt=\"Image of ").concat(item.name, "\"\n                />\n              </div>\n              <div class=\"zeldaItemDesc\">\n                <h4>").concat(item.name, "</h4>\n                <p>\n                  <strong>Located at:</strong>\n                  <br />\n                  ").concat((item === null || item === void 0 ? void 0 : item.location) || "No Location", "\n                </p>\n                <div class=\"itemDescInternal\">\n                  <p>ID: ").concat(item.id, "</p>\n                  <i class=\"fa-regular fa-heart\"></i>\n                </div>\n              </div>\n            </div>\n            <hr />\n            <div class=\"zeldaInfo\">\n              <p>\n                \"").concat(item.description, "\"\n              </p>\n            </div>\n");
     cardHolder === null || cardHolder === void 0 ? void 0 : cardHolder.appendChild(zeldaDiv);
 }
 var filterButtons = document.querySelectorAll(".filterButton");
 function getFilterButton(value) {
     tempArray = itemsArray.filter(function (item) { return item.category === value; });
-    console.log(tempArray);
+    displayCard(tempArray);
 }
 filterButtons.forEach(function (button) {
     button.addEventListener("click", function (e) { var _a; return getFilterButton((_a = e.target) === null || _a === void 0 ? void 0 : _a.value); });

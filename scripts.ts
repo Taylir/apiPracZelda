@@ -31,27 +31,25 @@ class CardItem {
   }
 }
 
-function setLocalStorage(data: string = "data") {
+function setLocalStorage(data: string = "data"): void {
   localStorage.setItem(`${data}`, JSON.stringify(itemsArray));
 }
 
-function getLocalStorage(data: string = "data") {
+function getLocalStorage(data: string = "data"): any {
   const gottenData = localStorage.getItem(`${data}`) ?? "";
   if (gottenData == "") return null;
-  const parsedData = JSON.parse(gottenData).sort(
-    (a: CardItem, b: CardItem) => a.id - b.id,
-  );
+  const parsedData = JSON.parse(gottenData);
   return parsedData;
 }
 
-async function getAllData() {
+async function getAllData(): Promise<void> {
   const localData: CardItem[] = getLocalStorage("data");
 
-  if (localData.length >= 300) {
+  if (localData?.length >= 300) {
     console.log("Got data from the storage");
     for (const card of localData) {
       itemsArray.push(card);
-      if (card.id === 10) displayCard();
+      if (itemsArray.length === 10) displayCard(itemsArray);
     }
     console.log(cardHolder?.childElementCount);
   } else {
@@ -61,6 +59,7 @@ async function getAllData() {
       "https://botw-compendium.herokuapp.com/api/v3/compendium/all",
     );
     const { data } = await resp.json();
+    data.sort((a: CardItem, b: CardItem): number => a.id - b.id);
     for (const item of data) {
       const card = new CardItem(
         item.name,
@@ -71,34 +70,35 @@ async function getAllData() {
         item.category,
       );
       itemsArray.push(card);
-      if (item.id === 10) {
-        displayCard();
+      if (itemsArray.length === 10) {
+        displayCard(itemsArray);
       }
     }
     setLocalStorage();
   }
 }
 
-loadMore?.addEventListener("click", () => {
+loadMore?.addEventListener("click", (): void => {
+  const usageArr = tempArray.length > 0 ? tempArray : itemsArray;
   const currentAmount: number = cardHolder?.childElementCount ?? 0;
-  const wantedCards: Array<CardItem> = itemsArray.slice(0, currentAmount + 10);
-  displayCard(wantedCards);
+  const wantedCards: Array<CardItem> = usageArr.slice(0, currentAmount + 10);
+  displayCard(wantedCards, currentAmount + 10);
 });
 
-function displayCard(arr: CardItem[] = itemsArray) {
+function displayCard(arr: CardItem[], num: number = 10): void {
   if (cardHolder !== null) {
     cardHolder.innerHTML = "";
   }
-  arr.forEach((item: CardItem, i: number) => {
-    createCard(item, i);
-    likedOrNot(item);
-  });
+  for (let i = 0; i < num; i++) {
+    createCard(arr[i], i);
+    likedOrNot(arr[i]);
+  }
 }
 
-function likedOrNot(item: CardItem) {
+function likedOrNot(item: CardItem): void {
   const thisItem = document.querySelector(`#zeldaItem-${item.id}`);
   const thisHeart = thisItem?.querySelector(".fa-heart");
-  thisHeart?.addEventListener("click", () => {
+  thisHeart?.addEventListener("click", (): void => {
     if (thisHeart.classList.contains("fa-regular")) {
       thisHeart.classList.remove("fa-regular");
       thisHeart.classList.add("fa-solid");
@@ -121,7 +121,7 @@ function createCard(item: CardItem, itemIndex: number): void {
               <div class="img_wrapper">
                 <img
                   src="${item.picture}"
-                  alt="${item.name}"
+                  alt="Image of ${item.name}"
                 />
               </div>
               <div class="zeldaItemDesc">
@@ -148,12 +148,12 @@ function createCard(item: CardItem, itemIndex: number): void {
 }
 
 const filterButtons = document.querySelectorAll(".filterButton");
-function getFilterButton(value: string) {
+function getFilterButton(value: string): void {
   tempArray = itemsArray.filter((item) => item.category === value);
-  console.log(tempArray);
+  displayCard(tempArray);
 }
-filterButtons.forEach((button) => {
-  button.addEventListener("click", (e: any) =>
+filterButtons.forEach((button): void => {
+  button.addEventListener("click", (e: any): void =>
     getFilterButton(e.target?.value),
   );
 });
