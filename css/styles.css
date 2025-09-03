@@ -9,7 +9,7 @@
 }
 
 body {
-  background-image: url("assets/zeldabg.png");
+  background-image: url("../assets/zeldabg.png");
 
   background-position: center;
   background-size: contain;
@@ -129,7 +129,7 @@ nav .img_wrapper img:hover {
 #heroSection {
   height: 100vh;
   width: 100vw;
-  background-image: url("./assets/Linkbackground.jpg");
+  background-image: url("../assets/Linkbackground.jpg");
   background-size: cover;
   background-position: center;
 }
