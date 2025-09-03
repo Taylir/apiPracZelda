@@ -10,7 +10,6 @@ class CardItem {
   picture: string;
   location: string;
   description: string;
-  liked: boolean;
   category: string;
 
   constructor(
@@ -28,6 +27,10 @@ class CardItem {
       (this.description = description),
       (this.category = category),
       (this.liked = false));
+  }
+
+  set liked(newLike: boolean) {
+    this.liked = newLike;
   }
 }
 
@@ -98,15 +101,21 @@ function displayCard(arr: CardItem[], num: number = 10): void {
 function likedOrNot(item: CardItem): void {
   const thisItem = document.querySelector(`#zeldaItem-${item.id}`);
   const thisHeart = thisItem?.querySelector(".fa-heart");
+  if (item.liked === true) {
+    thisHeart?.classList.remove("fa-regular");
+    thisHeart?.classList.add("fa-solid");
+  }
   thisHeart?.addEventListener("click", (): void => {
     if (thisHeart.classList.contains("fa-regular")) {
       thisHeart.classList.remove("fa-regular");
       thisHeart.classList.add("fa-solid");
       item.liked = true;
+      setLocalStorage();
     } else {
       thisHeart.classList.remove("fa-solid");
       thisHeart.classList.add("fa-regular");
       item.liked = false;
+      setLocalStorage();
     }
     console.log(`Item: ${item.id}, Liked: ${item.liked}`);
   });

@@ -48,6 +48,13 @@ var CardItem = /** @class */ (function () {
             (this.category = category),
             (this.liked = false));
     }
+    Object.defineProperty(CardItem.prototype, "liked", {
+        set: function (newLike) {
+            this.liked = newLike;
+        },
+        enumerable: false,
+        configurable: true
+    });
     return CardItem;
 }());
 function setLocalStorage(data) {
@@ -124,16 +131,22 @@ function displayCard(arr, num) {
 function likedOrNot(item) {
     var thisItem = document.querySelector("#zeldaItem-".concat(item.id));
     var thisHeart = thisItem === null || thisItem === void 0 ? void 0 : thisItem.querySelector(".fa-heart");
+    if (item.liked === true) {
+        thisHeart === null || thisHeart === void 0 ? void 0 : thisHeart.classList.remove("fa-regular");
+        thisHeart === null || thisHeart === void 0 ? void 0 : thisHeart.classList.add("fa-solid");
+    }
     thisHeart === null || thisHeart === void 0 ? void 0 : thisHeart.addEventListener("click", function () {
         if (thisHeart.classList.contains("fa-regular")) {
             thisHeart.classList.remove("fa-regular");
             thisHeart.classList.add("fa-solid");
             item.liked = true;
+            setLocalStorage();
         }
         else {
             thisHeart.classList.remove("fa-solid");
             thisHeart.classList.add("fa-regular");
             item.liked = false;
+            setLocalStorage();
         }
         console.log("Item: ".concat(item.id, ", Liked: ").concat(item.liked));
     });
