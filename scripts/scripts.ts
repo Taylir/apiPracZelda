@@ -123,35 +123,27 @@ function likedOrNot(item: CardItem): void {
 
 function createCard(item: CardItem, itemIndex: number): void {
   const zeldaDiv = document.createElement("div");
-  zeldaDiv.classList += "zeldaItem";
+  zeldaDiv.classList.add("zeldaItem");
   zeldaDiv.id = `zeldaItem-${item.id}`;
   zeldaDiv.innerHTML = `
-            <div class="zeldaHeadInfo">
-              <div class="img_wrapper">
-                <img
-                  src="${item.picture}"
-                  alt="Image of ${item.name}"
-                />
-              </div>
-              <div class="zeldaItemDesc">
-                <h4>${item.name}</h4>
-                <p>
-                  <strong>Located at:</strong>
-                  <br />
-                  ${item?.location || "No Location"}
-                </p>
-                <div class="itemDescInternal">
-                  <p>ID: ${item.id}</p>
-                  <i class="fa-regular fa-heart"></i>
-                </div>
-              </div>
-            </div>
-            <hr />
-            <div class="zeldaInfo">
-              <p>
-                "${item.description}"
-              </p>
-            </div>
+  <article class="zeldaCard">
+    <div class="zeldaImage">
+      <img src="${item.picture}" alt="Image of ${item.name}" />
+    </div>
+    <div class="zeldaContent">
+      <header class="zeldaHeader">
+        <h2>${item.name}</h2>
+        <button class="favoriteButton" aria-label="Add to favorites">
+          <i class="fa-regular fa-heart"></i>
+        </button>
+      </header>
+      <p class="location">
+        <strong>Located at:</strong> ${item?.location || "No Location"}
+      </p>
+      <p class="id">ID: ${item.id}</p>
+      <p class="description">"${item.description}"</p>
+    </div>
+  </article>
 `;
   cardHolder?.appendChild(zeldaDiv);
 }

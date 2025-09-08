@@ -153,9 +153,9 @@ function likedOrNot(item) {
 }
 function createCard(item, itemIndex) {
     var zeldaDiv = document.createElement("div");
-    zeldaDiv.classList += "zeldaItem";
+    zeldaDiv.classList.add("zeldaItem");
     zeldaDiv.id = "zeldaItem-".concat(item.id);
-    zeldaDiv.innerHTML = "\n            <div class=\"zeldaHeadInfo\">\n              <div class=\"img_wrapper\">\n                <img\n                  src=\"".concat(item.picture, "\"\n                  alt=\"Image of ").concat(item.name, "\"\n                />\n              </div>\n              <div class=\"zeldaItemDesc\">\n                <h4>").concat(item.name, "</h4>\n                <p>\n                  <strong>Located at:</strong>\n                  <br />\n                  ").concat((item === null || item === void 0 ? void 0 : item.location) || "No Location", "\n                </p>\n                <div class=\"itemDescInternal\">\n                  <p>ID: ").concat(item.id, "</p>\n                  <i class=\"fa-regular fa-heart\"></i>\n                </div>\n              </div>\n            </div>\n            <hr />\n            <div class=\"zeldaInfo\">\n              <p>\n                \"").concat(item.description, "\"\n              </p>\n            </div>\n");
+    zeldaDiv.innerHTML = "\n  <article class=\"zeldaCard\">\n    <div class=\"zeldaImage\">\n      <img src=\"".concat(item.picture, "\" alt=\"Image of ").concat(item.name, "\" />\n    </div>\n    <div class=\"zeldaContent\">\n      <header class=\"zeldaHeader\">\n        <h2>").concat(item.name, "</h2>\n        <button class=\"favoriteButton\" aria-label=\"Add to favorites\">\n          <i class=\"fa-regular fa-heart\"></i>\n        </button>\n      </header>\n      <p class=\"location\">\n        <strong>Located at:</strong> ").concat((item === null || item === void 0 ? void 0 : item.location) || "No Location", "\n      </p>\n      <p class=\"id\">ID: ").concat(item.id, "</p>\n      <p class=\"description\">\"").concat(item.description, "\"</p>\n    </div>\n  </article>\n");
     cardHolder === null || cardHolder === void 0 ? void 0 : cardHolder.appendChild(zeldaDiv);
 }
 var filterButtons = document.querySelectorAll(".filterButton");
