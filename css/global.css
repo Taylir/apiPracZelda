@@ -11,6 +11,7 @@
   --color-nav-bg: rgba(255, 255, 255, 0.7);
   --color-nav-scroll: linear-gradient(to bottom, #18662e, #27667b);
   --color-text: #1a1a1a;
+  --color-text-dark: #e0e0e0;
   --color-border: #d1c7a7;
 
   /* 🔲 Spacing & Layout */
@@ -329,7 +330,7 @@ nav .img_wrapper img:hover {
 @media (prefers-color-scheme: dark) {
   body {
     background-color: #0f0f0f;
-    color: #e0e0e0;
+    color: var(--color-text-dark);
   }
 
   nav,
@@ -338,8 +339,12 @@ nav .img_wrapper img:hover {
     border-bottom: 1px solid #2d2d2d;
   }
 
-  .navItem {
-    color: #e0e0e0;
+  #navItems a {
+    color: var(--color-text-dark);
+  }
+
+  #filterBar ul li button {
+    color: var(--color-text-dark);
   }
 
   .zeldaCard {
