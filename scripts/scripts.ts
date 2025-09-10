@@ -3,6 +3,7 @@ const loadMore = document.querySelector<HTMLButtonElement>("#loadMore");
 
 const itemsArray: Array<CardItem> = [];
 let tempArray: Array<CardItem> = [];
+let favoritesArray: CardItem[] = [];
 
 class CardItem {
   name: string;
@@ -25,8 +26,7 @@ class CardItem {
       (this.picture = picture),
       (this.location = location),
       (this.description = description),
-      (this.category = category),
-      (this.liked = false));
+      (this.category = category));
   }
 
   set liked(newLike: boolean) {
@@ -35,23 +35,28 @@ class CardItem {
 }
 
 function setLocalStorage(data: string = "data"): void {
-  localStorage.setItem(`${data}`, JSON.stringify(itemsArray));
+  const mixedArray: CardItem[] = itemsArray;
+  for (const item of favoritesArray) {
+    mixedArray.push(item);
+  }
+  favoritesArray = [];
+  localStorage.setItem(`${data}`, JSON.stringify(mixedArray));
 }
 
 function getLocalStorage(data: string = "data"): any {
   const gottenData = localStorage.getItem(`${data}`) ?? "";
-  if (gottenData == "") return null;
+  if (gottenData === "") return null;
   const parsedData = JSON.parse(gottenData);
   return parsedData;
 }
 
 async function getAllData(): Promise<void> {
-  const localData: CardItem[] = getLocalStorage("data");
+  const localData: CardItem[] = getLocalStorage("data") ?? [];
 
   if (localData?.length >= 300) {
     console.log("Got data from the storage");
     for (const card of localData) {
-      itemsArray.push(card);
+      card.liked === true ? favoritesArray.push(card) : itemsArray.push(card);
       if (itemsArray.length === 12) displayCard(itemsArray);
     }
     console.log(cardHolder?.childElementCount);
@@ -111,13 +116,12 @@ function likedOrNot(item: CardItem): void {
       thisHeart.classList.remove("fa-regular");
       thisHeart.classList.add("fa-solid");
       item.liked = true;
-      setLocalStorage();
     } else {
       thisHeart.classList.remove("fa-solid");
       thisHeart.classList.add("fa-regular");
       item.liked = false;
-      setLocalStorage();
     }
+    setLocalStorage();
     console.log(`Item: ${item.id}, Liked: ${item.liked}`);
   });
 }
@@ -151,8 +155,12 @@ function createCard(item: CardItem, itemIndex: number): void {
 
 const filterButtons = document.querySelectorAll(".filterButton");
 function getFilterButton(value: string): void {
-  tempArray = itemsArray.filter((item) => item.category === value);
-  displayCard(tempArray);
+  if (value === "favorites") {
+    displayCard(favoritesArray);
+  } else {
+    tempArray = itemsArray.filter((item) => item.category === value);
+    displayCard(tempArray);
+  }
 }
 filterButtons.forEach((button): void => {
   button.addEventListener("click", (e: any): void =>
@@ -161,3 +169,4 @@ filterButtons.forEach((button): void => {
 });
 
 getAllData();
+console.log(favoritesArray);

@@ -38,6 +38,7 @@ var cardHolder = document.querySelector("#displayHolder");
 var loadMore = document.querySelector("#loadMore");
 var itemsArray = [];
 var tempArray = [];
+var favoritesArray = [];
 var CardItem = /** @class */ (function () {
     function CardItem(name, id, picture, location, description, category) {
         ((this.name = name),
@@ -45,8 +46,7 @@ var CardItem = /** @class */ (function () {
             (this.picture = picture),
             (this.location = location),
             (this.description = description),
-            (this.category = category),
-            (this.liked = false));
+            (this.category = category));
     }
     Object.defineProperty(CardItem.prototype, "liked", {
         set: function (newLike) {
@@ -59,13 +59,19 @@ var CardItem = /** @class */ (function () {
 }());
 function setLocalStorage(data) {
     if (data === void 0) { data = "data"; }
-    localStorage.setItem("".concat(data), JSON.stringify(itemsArray));
+    var mixedArray = itemsArray;
+    for (var _i = 0, favoritesArray_1 = favoritesArray; _i < favoritesArray_1.length; _i++) {
+        var item = favoritesArray_1[_i];
+        mixedArray.push(item);
+    }
+    favoritesArray = [];
+    localStorage.setItem("".concat(data), JSON.stringify(mixedArray));
 }
 function getLocalStorage(data) {
     var _a;
     if (data === void 0) { data = "data"; }
     var gottenData = (_a = localStorage.getItem("".concat(data))) !== null && _a !== void 0 ? _a : "";
-    if (gottenData == "")
+    if (gottenData === "")
         return null;
     var parsedData = JSON.parse(gottenData);
     return parsedData;
@@ -73,15 +79,16 @@ function getLocalStorage(data) {
 function getAllData() {
     return __awaiter(this, void 0, void 0, function () {
         var localData, _i, localData_1, card, resp, data, _a, data_1, item, card;
-        return __generator(this, function (_b) {
-            switch (_b.label) {
+        var _b;
+        return __generator(this, function (_c) {
+            switch (_c.label) {
                 case 0:
-                    localData = getLocalStorage("data");
+                    localData = (_b = getLocalStorage("data")) !== null && _b !== void 0 ? _b : [];
                     if (!((localData === null || localData === void 0 ? void 0 : localData.length) >= 300)) return [3 /*break*/, 1];
                     console.log("Got data from the storage");
                     for (_i = 0, localData_1 = localData; _i < localData_1.length; _i++) {
                         card = localData_1[_i];
-                        itemsArray.push(card);
+                        card.liked === true ? favoritesArray.push(card) : itemsArray.push(card);
                         if (itemsArray.length === 12)
                             displayCard(itemsArray);
                     }
@@ -91,10 +98,10 @@ function getAllData() {
                     console.log("Got data from the api");
                     return [4 /*yield*/, fetch("https://botw-compendium.herokuapp.com/api/v3/compendium/all")];
                 case 2:
-                    resp = _b.sent();
+                    resp = _c.sent();
                     return [4 /*yield*/, resp.json()];
                 case 3:
-                    data = (_b.sent()).data;
+                    data = (_c.sent()).data;
                     data.sort(function (a, b) { return a.id - b.id; });
                     for (_a = 0, data_1 = data; _a < data_1.length; _a++) {
                         item = data_1[_a];
@@ -105,7 +112,7 @@ function getAllData() {
                         }
                     }
                     setLocalStorage();
-                    _b.label = 4;
+                    _c.label = 4;
                 case 4: return [2 /*return*/];
             }
         });
@@ -140,14 +147,15 @@ function likedOrNot(item) {
             thisHeart.classList.remove("fa-regular");
             thisHeart.classList.add("fa-solid");
             item.liked = true;
-            setLocalStorage();
+            var favorited = itemsArray.splice(itemsArray.indexOf(item), 1);
+            favoritesArray.push(favorited);
         }
         else {
             thisHeart.classList.remove("fa-solid");
             thisHeart.classList.add("fa-regular");
             item.liked = false;
-            setLocalStorage();
         }
+        setLocalStorage();
         console.log("Item: ".concat(item.id, ", Liked: ").concat(item.liked));
     });
 }
@@ -160,10 +168,16 @@ function createCard(item, itemIndex) {
 }
 var filterButtons = document.querySelectorAll(".filterButton");
 function getFilterButton(value) {
-    tempArray = itemsArray.filter(function (item) { return item.category === value; });
-    displayCard(tempArray);
+    if (value === "favorites") {
+        displayCard(favoritesArray);
+    }
+    else {
+        tempArray = itemsArray.filter(function (item) { return item.category === value; });
+        displayCard(tempArray);
+    }
 }
 filterButtons.forEach(function (button) {
     button.addEventListener("click", function (e) { var _a; return getFilterButton((_a = e.target) === null || _a === void 0 ? void 0 : _a.value); });
 });
 getAllData();
+console.log(favoritesArray);
