@@ -52,7 +52,7 @@ async function getAllData(): Promise<void> {
     console.log("Got data from the storage");
     for (const card of localData) {
       itemsArray.push(card);
-      if (itemsArray.length === 10) displayCard(itemsArray);
+      if (itemsArray.length === 12) displayCard(itemsArray);
     }
     console.log(cardHolder?.childElementCount);
   } else {
@@ -73,7 +73,7 @@ async function getAllData(): Promise<void> {
         item.category,
       );
       itemsArray.push(card);
-      if (itemsArray.length === 10) {
+      if (itemsArray.length === 12) {
         displayCard(itemsArray);
       }
     }
@@ -84,11 +84,11 @@ async function getAllData(): Promise<void> {
 loadMore?.addEventListener("click", (): void => {
   const usageArr = tempArray.length > 0 ? tempArray : itemsArray;
   const currentAmount: number = cardHolder?.childElementCount ?? 0;
-  const wantedCards: Array<CardItem> = usageArr.slice(0, currentAmount + 10);
-  displayCard(wantedCards, currentAmount + 10);
+  const wantedCards: Array<CardItem> = usageArr.slice(0, currentAmount + 12);
+  displayCard(wantedCards, currentAmount + 12);
 });
 
-function displayCard(arr: CardItem[], num: number = 10): void {
+function displayCard(arr: CardItem[], num: number = 12): void {
   if (cardHolder !== null) {
     cardHolder.innerHTML = "";
   }
@@ -105,6 +105,7 @@ function likedOrNot(item: CardItem): void {
     thisHeart?.classList.remove("fa-regular");
     thisHeart?.classList.add("fa-solid");
   }
+
   thisHeart?.addEventListener("click", (): void => {
     if (thisHeart.classList.contains("fa-regular")) {
       thisHeart.classList.remove("fa-regular");

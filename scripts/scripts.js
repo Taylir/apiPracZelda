@@ -82,7 +82,7 @@ function getAllData() {
                     for (_i = 0, localData_1 = localData; _i < localData_1.length; _i++) {
                         card = localData_1[_i];
                         itemsArray.push(card);
-                        if (itemsArray.length === 10)
+                        if (itemsArray.length === 12)
                             displayCard(itemsArray);
                     }
                     console.log(cardHolder === null || cardHolder === void 0 ? void 0 : cardHolder.childElementCount);
@@ -100,7 +100,7 @@ function getAllData() {
                         item = data_1[_a];
                         card = new CardItem(item.name, item.id, item.image, item.common_locations, item.description, item.category);
                         itemsArray.push(card);
-                        if (itemsArray.length === 10) {
+                        if (itemsArray.length === 12) {
                             displayCard(itemsArray);
                         }
                     }
@@ -115,11 +115,11 @@ loadMore === null || loadMore === void 0 ? void 0 : loadMore.addEventListener("c
     var _a;
     var usageArr = tempArray.length > 0 ? tempArray : itemsArray;
     var currentAmount = (_a = cardHolder === null || cardHolder === void 0 ? void 0 : cardHolder.childElementCount) !== null && _a !== void 0 ? _a : 0;
-    var wantedCards = usageArr.slice(0, currentAmount + 10);
-    displayCard(wantedCards, currentAmount + 10);
+    var wantedCards = usageArr.slice(0, currentAmount + 12);
+    displayCard(wantedCards, currentAmount + 12);
 });
 function displayCard(arr, num) {
-    if (num === void 0) { num = 10; }
+    if (num === void 0) { num = 12; }
     if (cardHolder !== null) {
         cardHolder.innerHTML = "";
     }

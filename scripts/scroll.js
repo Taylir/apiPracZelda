@@ -5,7 +5,7 @@ var scrollCheck = window.addEventListener("scroll", function () {
     var height = window.innerHeight;
     var scrollPos = window.scrollY;
     if (navBar && filterBar) {
-        navBar.classList.toggle("scrollNav", scrollPos > height - 120);
-        filterBar.classList.toggle("scrolled", scrollPos > height - 120);
+        navBar.classList.toggle("scrollNav", scrollPos > height - 64);
+        filterBar.classList.toggle("scrolled", scrollPos > height - 64);
     }
 });
