@@ -2,37 +2,8 @@ const cardHolder = document.querySelector<HTMLDivElement>("#displayHolder");
 const loadMore = document.querySelector<HTMLButtonElement>("#loadMore");
 
 const itemsArray: Array<CardItem> = [];
-let tempArray: Array<CardItem> = [];
 let favoritesArray: CardItem[] = [];
-
-class CardItem {
-  name: string;
-  id: number;
-  picture: string;
-  location: string;
-  description: string;
-  category: string;
-
-  constructor(
-    name: string,
-    id: number,
-    picture: string,
-    location: string,
-    description: string,
-    category: string,
-  ) {
-    ((this.name = name),
-      (this.id = id),
-      (this.picture = picture),
-      (this.location = location),
-      (this.description = description),
-      (this.category = category));
-  }
-
-  set liked(newLike: boolean) {
-    this.liked = newLike;
-  }
-}
+let sortSelection: string = "";
 
 function setLocalStorage(data: string = "data"): void {
   const mixedArray: CardItem[] = itemsArray;
@@ -57,7 +28,6 @@ async function getAllData(): Promise<void> {
     console.log("Got data from the storage");
     for (const card of localData) {
       card.liked === true ? favoritesArray.push(card) : itemsArray.push(card);
-      if (itemsArray.length === 12) displayCard(itemsArray);
     }
     console.log(cardHolder?.childElementCount);
   } else {
@@ -69,39 +39,28 @@ async function getAllData(): Promise<void> {
     const { data } = await resp.json();
     data.sort((a: CardItem, b: CardItem): number => a.id - b.id);
     for (const item of data) {
-      const card = new CardItem(
-        item.name,
-        item.id,
-        item.image,
-        item.common_locations,
-        item.description,
-        item.category,
-      );
+      const card: CardItem = {
+        name: item.name,
+        id: item.id,
+        picture: item.image,
+        location: item.common_locations,
+        description: item.description,
+        category: item.category,
+        liked: false,
+      };
       itemsArray.push(card);
       if (itemsArray.length === 12) {
-        displayCard(itemsArray);
       }
     }
     setLocalStorage();
   }
 }
 
+// FIX: This is needing a display function
 loadMore?.addEventListener("click", (): void => {
-  const usageArr = tempArray.length > 0 ? tempArray : itemsArray;
   const currentAmount: number = cardHolder?.childElementCount ?? 0;
-  const wantedCards: Array<CardItem> = usageArr.slice(0, currentAmount + 12);
-  displayCard(wantedCards, currentAmount + 12);
+  //const wantedCards: Array<CardItem> = usageArr.slice(0, currentAmount + 12);
 });
-
-function displayCard(arr: CardItem[], num: number = 12): void {
-  if (cardHolder !== null) {
-    cardHolder.innerHTML = "";
-  }
-  for (let i = 0; i < num; i++) {
-    createCard(arr[i], i);
-    likedOrNot(arr[i]);
-  }
-}
 
 function likedOrNot(item: CardItem): void {
   const thisItem = document.querySelector(`#zeldaItem-${item.id}`);
@@ -154,17 +113,10 @@ function createCard(item: CardItem, itemIndex: number): void {
 }
 
 const filterButtons = document.querySelectorAll(".filterButton");
-function getFilterButton(value: string): void {
-  if (value === "favorites") {
-    displayCard(favoritesArray);
-  } else {
-    tempArray = itemsArray.filter((item) => item.category === value);
-    displayCard(tempArray);
-  }
-}
 filterButtons.forEach((button): void => {
-  button.addEventListener("click", (e: any): void =>
-    getFilterButton(e.target?.value),
+  button.addEventListener(
+    "click",
+    (e: any): void => console.log(e.target?.value), // FIX: NEEDS DISPLAY FUNCTION
   );
 });
 
