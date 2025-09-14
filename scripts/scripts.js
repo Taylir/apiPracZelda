@@ -37,26 +37,8 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
 var cardHolder = document.querySelector("#displayHolder");
 var loadMore = document.querySelector("#loadMore");
 var itemsArray = [];
-var tempArray = [];
 var favoritesArray = [];
-var CardItem = /** @class */ (function () {
-    function CardItem(name, id, picture, location, description, category) {
-        ((this.name = name),
-            (this.id = id),
-            (this.picture = picture),
-            (this.location = location),
-            (this.description = description),
-            (this.category = category));
-    }
-    Object.defineProperty(CardItem.prototype, "liked", {
-        set: function (newLike) {
-            this.liked = newLike;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    return CardItem;
-}());
+var sortSelection = "";
 function setLocalStorage(data) {
     if (data === void 0) { data = "data"; }
     var mixedArray = itemsArray;
@@ -90,7 +72,7 @@ function getAllData() {
                         card = localData_1[_i];
                         card.liked === true ? favoritesArray.push(card) : itemsArray.push(card);
                         if (itemsArray.length === 12)
-                            displayCard(itemsArray);
+                            displayCards();
                     }
                     console.log(cardHolder === null || cardHolder === void 0 ? void 0 : cardHolder.childElementCount);
                     return [3 /*break*/, 4];
@@ -105,10 +87,18 @@ function getAllData() {
                     data.sort(function (a, b) { return a.id - b.id; });
                     for (_a = 0, data_1 = data; _a < data_1.length; _a++) {
                         item = data_1[_a];
-                        card = new CardItem(item.name, item.id, item.image, item.common_locations, item.description, item.category);
+                        card = {
+                            name: item.name,
+                            id: item.id,
+                            picture: item.image,
+                            location: item.common_locations,
+                            description: item.description,
+                            category: item.category,
+                            liked: false,
+                        };
                         itemsArray.push(card);
                         if (itemsArray.length === 12) {
-                            displayCard(itemsArray);
+                            displayCards();
                         }
                     }
                     setLocalStorage();
@@ -120,21 +110,9 @@ function getAllData() {
 }
 loadMore === null || loadMore === void 0 ? void 0 : loadMore.addEventListener("click", function () {
     var _a;
-    var usageArr = tempArray.length > 0 ? tempArray : itemsArray;
     var currentAmount = (_a = cardHolder === null || cardHolder === void 0 ? void 0 : cardHolder.childElementCount) !== null && _a !== void 0 ? _a : 0;
-    var wantedCards = usageArr.slice(0, currentAmount + 12);
-    displayCard(wantedCards, currentAmount + 12);
+    displayCards(currentAmount + 12);
 });
-function displayCard(arr, num) {
-    if (num === void 0) { num = 12; }
-    if (cardHolder !== null) {
-        cardHolder.innerHTML = "";
-    }
-    for (var i = 0; i < num; i++) {
-        createCard(arr[i], i);
-        likedOrNot(arr[i]);
-    }
-}
 function likedOrNot(item) {
     var thisItem = document.querySelector("#zeldaItem-".concat(item.id));
     var thisHeart = thisItem === null || thisItem === void 0 ? void 0 : thisItem.querySelector(".fa-heart");
@@ -147,8 +125,6 @@ function likedOrNot(item) {
             thisHeart.classList.remove("fa-regular");
             thisHeart.classList.add("fa-solid");
             item.liked = true;
-            var favorited = itemsArray.splice(itemsArray.indexOf(item), 1);
-            favoritesArray.push(favorited);
         }
         else {
             thisHeart.classList.remove("fa-solid");
@@ -159,6 +135,31 @@ function likedOrNot(item) {
         console.log("Item: ".concat(item.id, ", Liked: ").concat(item.liked));
     });
 }
+function displayCards(num) {
+    if (num === void 0) { num = 12; }
+    if (cardHolder && (cardHolder === null || cardHolder === void 0 ? void 0 : cardHolder.childElementCount)) {
+        cardHolder.innerHTML = "";
+    }
+    if (sortSelection === "") {
+        for (var i = 0; i < num; i++) {
+            createCard(itemsArray[i], i);
+            likedOrNot(itemsArray[i]);
+        }
+    }
+    else if (sortSelection === "favorites") {
+        for (var i = 0; i < num; i++) {
+            createCard(favoritesArray[i], i);
+            likedOrNot(favoritesArray[i]);
+        }
+    }
+    else {
+        var filteredArr = itemsArray.filter(function (item) { return item.category === sortSelection; });
+        for (var i = 0; i < num; i++) {
+            createCard(filteredArr[i], i);
+            likedOrNot(filteredArr[i]);
+        }
+    }
+}
 function createCard(item, itemIndex) {
     var zeldaDiv = document.createElement("div");
     zeldaDiv.classList.add("zeldaItem");
@@ -167,17 +168,12 @@ function createCard(item, itemIndex) {
     cardHolder === null || cardHolder === void 0 ? void 0 : cardHolder.appendChild(zeldaDiv);
 }
 var filterButtons = document.querySelectorAll(".filterButton");
-function getFilterButton(value) {
-    if (value === "favorites") {
-        displayCard(favoritesArray);
-    }
-    else {
-        tempArray = itemsArray.filter(function (item) { return item.category === value; });
-        displayCard(tempArray);
-    }
-}
 filterButtons.forEach(function (button) {
-    button.addEventListener("click", function (e) { var _a; return getFilterButton((_a = e.target) === null || _a === void 0 ? void 0 : _a.value); });
+    button.addEventListener("click", function (e) {
+        var _a;
+        sortSelection = (_a = e === null || e === void 0 ? void 0 : e.target) === null || _a === void 0 ? void 0 : _a.value;
+        displayCards();
+    });
 });
 getAllData();
 console.log(favoritesArray);

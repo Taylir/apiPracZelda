@@ -28,6 +28,7 @@ async function getAllData(): Promise<void> {
     console.log("Got data from the storage");
     for (const card of localData) {
       card.liked === true ? favoritesArray.push(card) : itemsArray.push(card);
+      if (itemsArray.length === 12) displayCards();
     }
     console.log(cardHolder?.childElementCount);
   } else {
@@ -50,16 +51,16 @@ async function getAllData(): Promise<void> {
       };
       itemsArray.push(card);
       if (itemsArray.length === 12) {
+        displayCards();
       }
     }
     setLocalStorage();
   }
 }
 
-// FIX: This is needing a display function
 loadMore?.addEventListener("click", (): void => {
   const currentAmount: number = cardHolder?.childElementCount ?? 0;
-  //const wantedCards: Array<CardItem> = usageArr.slice(0, currentAmount + 12);
+  displayCards(currentAmount + 12);
 });
 
 function likedOrNot(item: CardItem): void {
@@ -83,6 +84,31 @@ function likedOrNot(item: CardItem): void {
     setLocalStorage();
     console.log(`Item: ${item.id}, Liked: ${item.liked}`);
   });
+}
+
+function displayCards(num: number = 12) {
+  if (cardHolder && cardHolder?.childElementCount) {
+    cardHolder.innerHTML = "";
+  }
+  if (sortSelection === "") {
+    for (let i = 0; i < num; i++) {
+      createCard(itemsArray[i], i);
+      likedOrNot(itemsArray[i]);
+    }
+  } else if (sortSelection === "favorites") {
+    for (let i = 0; i < num; i++) {
+      createCard(favoritesArray[i], i);
+      likedOrNot(favoritesArray[i]);
+    }
+  } else {
+    const filteredArr = itemsArray.filter(
+      (item) => item.category === sortSelection,
+    );
+    for (let i = 0; i < num; i++) {
+      createCard(filteredArr[i], i);
+      likedOrNot(filteredArr[i]);
+    }
+  }
 }
 
 function createCard(item: CardItem, itemIndex: number): void {
@@ -114,10 +140,10 @@ function createCard(item: CardItem, itemIndex: number): void {
 
 const filterButtons = document.querySelectorAll(".filterButton");
 filterButtons.forEach((button): void => {
-  button.addEventListener(
-    "click",
-    (e: any): void => console.log(e.target?.value), // FIX: NEEDS DISPLAY FUNCTION
-  );
+  button.addEventListener("click", (e: any): void => {
+    sortSelection = e?.target?.value;
+    displayCards();
+  });
 });
 
 getAllData();
