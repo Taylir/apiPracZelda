@@ -39,6 +39,9 @@ var loadMore = document.querySelector("#loadMore");
 var itemsArray = [];
 var favoritesArray = [];
 var sortSelection = "";
+/* ============================
+    Local Stoarage functions
+   ============================ */
 function setLocalStorage(data) {
     if (data === void 0) { data = "data"; }
     var mixedArray = itemsArray;
@@ -58,6 +61,9 @@ function getLocalStorage(data) {
     var parsedData = JSON.parse(gottenData);
     return parsedData;
 }
+/* ============================
+    API/Get data function
+   ============================ */
 function getAllData() {
     return __awaiter(this, void 0, void 0, function () {
         var localData, _i, localData_1, card, resp, data, _a, data_1, item, card;
@@ -113,6 +119,16 @@ loadMore === null || loadMore === void 0 ? void 0 : loadMore.addEventListener("c
     var currentAmount = (_a = cardHolder === null || cardHolder === void 0 ? void 0 : cardHolder.childElementCount) !== null && _a !== void 0 ? _a : 0;
     displayCards(currentAmount + 12);
 });
+/* ============================
+    Filter base Array
+   ============================ */
+function filterMainArrays() {
+    itemsArray = itemsArray.filter(function (item) { return item.liked === false; });
+    favoritesArray = favoritesArray.filter(function (item) { return item.liked === true; });
+}
+/* ============================
+    Favoriting Section
+   ============================ */
 function likedOrNot(item) {
     var thisItem = document.querySelector("#zeldaItem-".concat(item.id));
     var thisHeart = thisItem === null || thisItem === void 0 ? void 0 : thisItem.querySelector(".fa-heart");
@@ -125,19 +141,38 @@ function likedOrNot(item) {
             thisHeart.classList.remove("fa-regular");
             thisHeart.classList.add("fa-solid");
             item.liked = true;
+            moveFavorited(item);
         }
         else {
             thisHeart.classList.remove("fa-solid");
             thisHeart.classList.add("fa-regular");
             item.liked = false;
+            moveFavorited(item);
         }
         setLocalStorage();
         console.log("Item: ".concat(item.id, ", Liked: ").concat(item.liked));
     });
 }
+function moveFavorited(item) {
+    if (item.liked === true) {
+        favoritesArray.push(item);
+        displayCards();
+    }
+    else if (item.liked === false) {
+        itemsArray.push(item);
+        displayCards();
+    }
+    else {
+        console.log("wtf is going on");
+    }
+}
+/* ============================
+    Creating and displaying cards
+   ============================ */
 function displayCards(num) {
     if (num === void 0) { num = 12; }
-    if (cardHolder && (cardHolder === null || cardHolder === void 0 ? void 0 : cardHolder.childElementCount)) {
+    filterMainArrays();
+    if (cardHolder && (cardHolder === null || cardHolder === void 0 ? void 0 : cardHolder.childElementCount) > 0) {
         cardHolder.innerHTML = "";
     }
     if (sortSelection === "") {
@@ -167,6 +202,9 @@ function createCard(item, itemIndex) {
     zeldaDiv.innerHTML = "\n  <article class=\"zeldaCard\">\n    <div class=\"zeldaImage\">\n      <img src=\"".concat(item.picture, "\" alt=\"Image of ").concat(item.name, "\" />\n    </div>\n    <div class=\"zeldaContent\">\n      <header class=\"zeldaHeader\">\n        <h2>").concat(item.name, "</h2>\n        <button class=\"favoriteButton\" aria-label=\"Add to favorites\">\n          <i class=\"fa-regular fa-heart\"></i>\n        </button>\n      </header>\n      <p class=\"location\">\n        <strong>Located at:</strong> ").concat((item === null || item === void 0 ? void 0 : item.location) || "No Location", "\n      </p>\n      <p class=\"id\">ID: ").concat(item.id, "</p>\n      <p class=\"description\">\"").concat(item.description, "\"</p>\n    </div>\n  </article>\n");
     cardHolder === null || cardHolder === void 0 ? void 0 : cardHolder.appendChild(zeldaDiv);
 }
+/* ============================
+    Filtering section
+   ============================ */
 var filterButtons = document.querySelectorAll(".filterButton");
 filterButtons.forEach(function (button) {
     button.addEventListener("click", function (e) {

@@ -1,9 +1,13 @@
 const cardHolder = document.querySelector<HTMLDivElement>("#displayHolder");
 const loadMore = document.querySelector<HTMLButtonElement>("#loadMore");
 
-const itemsArray: Array<CardItem> = [];
+let itemsArray: Array<CardItem> = [];
 let favoritesArray: CardItem[] = [];
 let sortSelection: string = "";
+
+/* ============================
+    Local Stoarage functions
+   ============================ */
 
 function setLocalStorage(data: string = "data"): void {
   const mixedArray: CardItem[] = itemsArray;
@@ -20,6 +24,10 @@ function getLocalStorage(data: string = "data"): any {
   const parsedData = JSON.parse(gottenData);
   return parsedData;
 }
+
+/* ============================
+    API/Get data function
+   ============================ */
 
 async function getAllData(): Promise<void> {
   const localData: CardItem[] = getLocalStorage("data") ?? [];
@@ -63,6 +71,18 @@ loadMore?.addEventListener("click", (): void => {
   displayCards(currentAmount + 12);
 });
 
+/* ============================
+    Filter base Array
+   ============================ */
+
+function filterMainArrays() {
+  itemsArray = itemsArray.filter((item) => item.liked === false);
+  favoritesArray = favoritesArray.filter((item) => item.liked === true);
+}
+/* ============================
+    Favoriting Section
+   ============================ */
+
 function likedOrNot(item: CardItem): void {
   const thisItem = document.querySelector(`#zeldaItem-${item.id}`);
   const thisHeart = thisItem?.querySelector(".fa-heart");
@@ -76,18 +96,37 @@ function likedOrNot(item: CardItem): void {
       thisHeart.classList.remove("fa-regular");
       thisHeart.classList.add("fa-solid");
       item.liked = true;
+      moveFavorited(item);
     } else {
       thisHeart.classList.remove("fa-solid");
       thisHeart.classList.add("fa-regular");
       item.liked = false;
+      moveFavorited(item);
     }
     setLocalStorage();
     console.log(`Item: ${item.id}, Liked: ${item.liked}`);
   });
 }
 
+function moveFavorited(item: CardItem) {
+  if (item.liked === true) {
+    favoritesArray.push(item);
+    displayCards();
+  } else if (item.liked === false) {
+    itemsArray.push(item);
+    displayCards();
+  } else {
+    console.log("wtf is going on");
+  }
+}
+
+/* ============================
+    Creating and displaying cards
+   ============================ */
+
 function displayCards(num: number = 12) {
-  if (cardHolder && cardHolder?.childElementCount) {
+  filterMainArrays();
+  if (cardHolder && cardHolder?.childElementCount > 0) {
     cardHolder.innerHTML = "";
   }
   if (sortSelection === "") {
@@ -137,6 +176,10 @@ function createCard(item: CardItem, itemIndex: number): void {
 `;
   cardHolder?.appendChild(zeldaDiv);
 }
+
+/* ============================
+    Filtering section
+   ============================ */
 
 const filterButtons = document.querySelectorAll(".filterButton");
 filterButtons.forEach((button): void => {
