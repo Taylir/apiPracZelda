@@ -37,20 +37,13 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
 var cardHolder = document.querySelector("#displayHolder");
 var loadMore = document.querySelector("#loadMore");
 var itemsArray = [];
-var favoritesArray = [];
 var sortSelection = "";
 /* ============================
     Local Stoarage functions
    ============================ */
 function setLocalStorage(data) {
     if (data === void 0) { data = "data"; }
-    var mixedArray = itemsArray;
-    for (var _i = 0, favoritesArray_1 = favoritesArray; _i < favoritesArray_1.length; _i++) {
-        var item = favoritesArray_1[_i];
-        mixedArray.push(item);
-    }
-    favoritesArray = [];
-    localStorage.setItem("".concat(data), JSON.stringify(mixedArray));
+    localStorage.setItem("".concat(data), JSON.stringify(itemsArray));
 }
 function getLocalStorage(data) {
     var _a;
@@ -76,11 +69,9 @@ function getAllData() {
                     console.log("Got data from the storage");
                     for (_i = 0, localData_1 = localData; _i < localData_1.length; _i++) {
                         card = localData_1[_i];
-                        card.liked === true ? favoritesArray.push(card) : itemsArray.push(card);
-                        if (itemsArray.length === 12)
-                            displayCards();
+                        itemsArray.push(card);
                     }
-                    console.log(cardHolder === null || cardHolder === void 0 ? void 0 : cardHolder.childElementCount);
+                    displayCards();
                     return [3 /*break*/, 4];
                 case 1:
                     console.log("Got data from the api");
@@ -103,10 +94,8 @@ function getAllData() {
                             liked: false,
                         };
                         itemsArray.push(card);
-                        if (itemsArray.length === 12) {
-                            displayCards();
-                        }
                     }
+                    displayCards();
                     setLocalStorage();
                     _c.label = 4;
                 case 4: return [2 /*return*/];
@@ -122,10 +111,6 @@ loadMore === null || loadMore === void 0 ? void 0 : loadMore.addEventListener("c
 /* ============================
     Filter base Array
    ============================ */
-function filterMainArrays() {
-    itemsArray = itemsArray.filter(function (item) { return item.liked === false; });
-    favoritesArray = favoritesArray.filter(function (item) { return item.liked === true; });
-}
 /* ============================
     Favoriting Section
    ============================ */
@@ -141,65 +126,56 @@ function likedOrNot(item) {
             thisHeart.classList.remove("fa-regular");
             thisHeart.classList.add("fa-solid");
             item.liked = true;
-            moveFavorited(item);
+            displayCards();
         }
         else {
             thisHeart.classList.remove("fa-solid");
             thisHeart.classList.add("fa-regular");
             item.liked = false;
-            moveFavorited(item);
+            displayCards();
         }
         setLocalStorage();
-        console.log("Item: ".concat(item.id, ", Liked: ").concat(item.liked));
     });
-}
-function moveFavorited(item) {
-    if (item.liked === true) {
-        favoritesArray.push(item);
-        displayCards();
-    }
-    else if (item.liked === false) {
-        itemsArray.push(item);
-        displayCards();
-    }
-    else {
-        console.log("wtf is going on");
-    }
 }
 /* ============================
     Creating and displaying cards
    ============================ */
 function displayCards(num) {
     if (num === void 0) { num = 12; }
-    filterMainArrays();
-    if (cardHolder && (cardHolder === null || cardHolder === void 0 ? void 0 : cardHolder.childElementCount) > 0) {
+    if (cardHolder) {
         cardHolder.innerHTML = "";
     }
+    var wantedItems = itemsArray;
     if (sortSelection === "") {
-        for (var i = 0; i < num; i++) {
-            createCard(itemsArray[i], i);
-            likedOrNot(itemsArray[i]);
-        }
+        wantedItems = wantedItems
+            .filter(function (item) { return item.liked === false; })
+            .sort(function (a, b) { return a.id - b.id; })
+            .slice(0, num);
     }
     else if (sortSelection === "favorites") {
-        for (var i = 0; i < num; i++) {
-            createCard(favoritesArray[i], i);
-            likedOrNot(favoritesArray[i]);
-        }
+        wantedItems = wantedItems
+            .filter(function (item) { return item.liked === true; })
+            .sort(function (a, b) { return a.id - b.id; })
+            .slice(0, num);
     }
     else {
-        var filteredArr = itemsArray.filter(function (item) { return item.category === sortSelection; });
-        for (var i = 0; i < num; i++) {
-            createCard(filteredArr[i], i);
-            likedOrNot(filteredArr[i]);
-        }
+        wantedItems = wantedItems
+            .filter(function (item) { return item.category === sortSelection && item.liked === false; })
+            .sort(function (a, b) { return a.id - b.id; })
+            .slice(0, num);
+    }
+    console.log("wanted Items" + wantedItems);
+    for (var _i = 0, wantedItems_1 = wantedItems; _i < wantedItems_1.length; _i++) {
+        var item = wantedItems_1[_i];
+        createCard(item);
+        likedOrNot(item);
     }
 }
-function createCard(item, itemIndex) {
+function createCard(item) {
     var zeldaDiv = document.createElement("div");
     zeldaDiv.classList.add("zeldaItem");
-    zeldaDiv.id = "zeldaItem-".concat(item.id);
-    zeldaDiv.innerHTML = "\n  <article class=\"zeldaCard\">\n    <div class=\"zeldaImage\">\n      <img src=\"".concat(item.picture, "\" alt=\"Image of ").concat(item.name, "\" />\n    </div>\n    <div class=\"zeldaContent\">\n      <header class=\"zeldaHeader\">\n        <h2>").concat(item.name, "</h2>\n        <button class=\"favoriteButton\" aria-label=\"Add to favorites\">\n          <i class=\"fa-regular fa-heart\"></i>\n        </button>\n      </header>\n      <p class=\"location\">\n        <strong>Located at:</strong> ").concat((item === null || item === void 0 ? void 0 : item.location) || "No Location", "\n      </p>\n      <p class=\"id\">ID: ").concat(item.id, "</p>\n      <p class=\"description\">\"").concat(item.description, "\"</p>\n    </div>\n  </article>\n");
+    zeldaDiv.id = "zeldaItem-".concat(item === null || item === void 0 ? void 0 : item.id);
+    zeldaDiv.innerHTML = "\n  <article class=\"zeldaCard\">\n    <div class=\"zeldaImage\">\n      <img src=\"".concat(item === null || item === void 0 ? void 0 : item.picture, "\" alt=\"Image of ").concat(item === null || item === void 0 ? void 0 : item.name, "\" />\n    </div>\n    <div class=\"zeldaContent\">\n      <header class=\"zeldaHeader\">\n        <h2>").concat(item === null || item === void 0 ? void 0 : item.name, "</h2>\n        <button class=\"favoriteButton\" aria-label=\"Add to favorites\">\n          <i class=\"fa-regular fa-heart\"></i>\n        </button>\n      </header>\n      <p class=\"location\">\n        <strong>Located at:</strong> ").concat((item === null || item === void 0 ? void 0 : item.location) || "No Location", "\n      </p>\n      <p class=\"id\">ID: ").concat(item.id, "</p>\n      <p class=\"description\">\"").concat(item === null || item === void 0 ? void 0 : item.description, "\"</p>\n    </div>\n  </article>\n");
     cardHolder === null || cardHolder === void 0 ? void 0 : cardHolder.appendChild(zeldaDiv);
 }
 /* ============================
@@ -214,4 +190,3 @@ filterButtons.forEach(function (button) {
     });
 });
 getAllData();
-console.log(favoritesArray);

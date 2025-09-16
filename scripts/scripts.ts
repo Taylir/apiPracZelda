@@ -1,8 +1,7 @@
 const cardHolder = document.querySelector<HTMLDivElement>("#displayHolder");
 const loadMore = document.querySelector<HTMLButtonElement>("#loadMore");
 
-let itemsArray: Array<CardItem> = [];
-let favoritesArray: CardItem[] = [];
+const itemsArray: Array<CardItem> = [];
 let sortSelection: string = "";
 
 /* ============================
@@ -10,12 +9,7 @@ let sortSelection: string = "";
    ============================ */
 
 function setLocalStorage(data: string = "data"): void {
-  const mixedArray: CardItem[] = itemsArray;
-  for (const item of favoritesArray) {
-    mixedArray.push(item);
-  }
-  favoritesArray = [];
-  localStorage.setItem(`${data}`, JSON.stringify(mixedArray));
+  localStorage.setItem(`${data}`, JSON.stringify(itemsArray));
 }
 
 function getLocalStorage(data: string = "data"): any {
@@ -35,10 +29,9 @@ async function getAllData(): Promise<void> {
   if (localData?.length >= 300) {
     console.log("Got data from the storage");
     for (const card of localData) {
-      card.liked === true ? favoritesArray.push(card) : itemsArray.push(card);
-      if (itemsArray.length === 12) displayCards();
+      itemsArray.push(card);
     }
-    console.log(cardHolder?.childElementCount);
+    displayCards();
   } else {
     console.log("Got data from the api");
 
@@ -58,10 +51,8 @@ async function getAllData(): Promise<void> {
         liked: false,
       };
       itemsArray.push(card);
-      if (itemsArray.length === 12) {
-        displayCards();
-      }
     }
+    displayCards();
     setLocalStorage();
   }
 }
@@ -75,10 +66,6 @@ loadMore?.addEventListener("click", (): void => {
     Filter base Array
    ============================ */
 
-function filterMainArrays() {
-  itemsArray = itemsArray.filter((item) => item.liked === false);
-  favoritesArray = favoritesArray.filter((item) => item.liked === true);
-}
 /* ============================
     Favoriting Section
    ============================ */
@@ -96,28 +83,15 @@ function likedOrNot(item: CardItem): void {
       thisHeart.classList.remove("fa-regular");
       thisHeart.classList.add("fa-solid");
       item.liked = true;
-      moveFavorited(item);
+      displayCards();
     } else {
       thisHeart.classList.remove("fa-solid");
       thisHeart.classList.add("fa-regular");
       item.liked = false;
-      moveFavorited(item);
+      displayCards();
     }
     setLocalStorage();
-    console.log(`Item: ${item.id}, Liked: ${item.liked}`);
   });
-}
-
-function moveFavorited(item: CardItem) {
-  if (item.liked === true) {
-    favoritesArray.push(item);
-    displayCards();
-  } else if (item.liked === false) {
-    itemsArray.push(item);
-    displayCards();
-  } else {
-    console.log("wtf is going on");
-  }
 }
 
 /* ============================
@@ -125,43 +99,48 @@ function moveFavorited(item: CardItem) {
    ============================ */
 
 function displayCards(num: number = 12) {
-  filterMainArrays();
-  if (cardHolder && cardHolder?.childElementCount > 0) {
+  if (cardHolder) {
     cardHolder.innerHTML = "";
   }
+
+  let wantedItems = itemsArray;
+
   if (sortSelection === "") {
-    for (let i = 0; i < num; i++) {
-      createCard(itemsArray[i], i);
-      likedOrNot(itemsArray[i]);
-    }
+    wantedItems = wantedItems
+      .filter((item) => item.liked === false)
+      .sort((a, b) => a.id - b.id)
+      .slice(0, num);
   } else if (sortSelection === "favorites") {
-    for (let i = 0; i < num; i++) {
-      createCard(favoritesArray[i], i);
-      likedOrNot(favoritesArray[i]);
-    }
+    wantedItems = wantedItems
+      .filter((item) => item.liked === true)
+      .sort((a, b) => a.id - b.id)
+      .slice(0, num);
   } else {
-    const filteredArr = itemsArray.filter(
-      (item) => item.category === sortSelection,
-    );
-    for (let i = 0; i < num; i++) {
-      createCard(filteredArr[i], i);
-      likedOrNot(filteredArr[i]);
-    }
+    wantedItems = wantedItems
+      .filter((item) => item.category === sortSelection && item.liked === false)
+      .sort((a, b) => a.id - b.id)
+      .slice(0, num);
+  }
+  console.log("wanted Items" + wantedItems);
+
+  for (const item of wantedItems) {
+    createCard(item);
+    likedOrNot(item);
   }
 }
 
-function createCard(item: CardItem, itemIndex: number): void {
+function createCard(item: CardItem): void {
   const zeldaDiv = document.createElement("div");
   zeldaDiv.classList.add("zeldaItem");
-  zeldaDiv.id = `zeldaItem-${item.id}`;
+  zeldaDiv.id = `zeldaItem-${item?.id}`;
   zeldaDiv.innerHTML = `
   <article class="zeldaCard">
     <div class="zeldaImage">
-      <img src="${item.picture}" alt="Image of ${item.name}" />
+      <img src="${item?.picture}" alt="Image of ${item?.name}" />
     </div>
     <div class="zeldaContent">
       <header class="zeldaHeader">
-        <h2>${item.name}</h2>
+        <h2>${item?.name}</h2>
         <button class="favoriteButton" aria-label="Add to favorites">
           <i class="fa-regular fa-heart"></i>
         </button>
@@ -170,7 +149,7 @@ function createCard(item: CardItem, itemIndex: number): void {
         <strong>Located at:</strong> ${item?.location || "No Location"}
       </p>
       <p class="id">ID: ${item.id}</p>
-      <p class="description">"${item.description}"</p>
+      <p class="description">"${item?.description}"</p>
     </div>
   </article>
 `;
@@ -190,4 +169,3 @@ filterButtons.forEach((button): void => {
 });
 
 getAllData();
-console.log(favoritesArray);
