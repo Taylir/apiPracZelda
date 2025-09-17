@@ -1,9 +1,5 @@
-/* ================================
-   Zelda Project Modernized CSS
-   ================================ */
-
 :root {
-  /* 🎨 Color System */
+  /* Colors */
   --color-bg: #f9f9f9;
   --color-surface: #ffffff;
   --color-accent: #be5103;
@@ -14,20 +10,20 @@
   --color-text-dark: #e0e0e0;
   --color-border: #d1c7a7;
 
-  /* 🔲 Spacing & Layout */
+  /* Spacing & Layout */
   --space-xs: 4px;
   --space-sm: 8px;
   --space-md: 16px;
   --space-lg: 24px;
   --space-xl: 32px;
 
-  /* ⭕ Radii */
+  /* Radii */
   --radius-sm: 6px;
   --radius-md: 12px;
-  --radius-lg: 22px;
+  --radius-lg: 24px;
   --radius-round: 50%;
 
-  /* 🌑 Shadows */
+  /* Shadows */
   --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.15);
   --shadow-md: 0 4px 16px rgba(0, 0, 0, 0.2);
   --shadow-lg: 0 8px 32px rgba(0, 0, 0, 0.25);
@@ -52,14 +48,14 @@ body {
   line-height: 1.6;
 }
 
-/* ============ CONTAINER ============ */
+/* ============ Container ============ */
 .container {
   max-width: 1440px;
   margin: 0 auto;
   padding: 0 var(--space-md);
 }
 
-/* ============ NAVIGATION ============ */
+/* ============ Navigation ============ */
 nav,
 .scrollNav {
   position: fixed;
@@ -155,7 +151,7 @@ nav .img_wrapper img:hover {
   left: 0;
 }
 
-/* ============ HERO SECTION ============ */
+/* ============ Hero Section ============ */
 #heroSection {
   height: 100vh;
   width: 100%;
@@ -166,10 +162,9 @@ nav .img_wrapper img:hover {
   background-position: center;
 }
 
-/* ============ FILTER BAR ============ */
+/* ============ Filter Bar ============ */
 #filterBar {
   height: 50px;
-  background-color: #27667b;
   transition: top 300ms ease-in-out;
 }
 
@@ -201,7 +196,7 @@ nav .img_wrapper img:hover {
   color: white;
 }
 
-/* ============ DISPLAY GRID ============ */
+/* ============ Display Grid ============ */
 #displaySection {
   padding: var(--space-xl) var(--space-md);
 }
@@ -212,9 +207,7 @@ nav .img_wrapper img:hover {
   gap: var(--space-lg);
 }
 
-/* ================================
-   Zelda Card (Modern Flowing Style)
-   ================================ */
+/* =============Zelda Card============== */
 .zeldaItem {
   height: max-content;
 }
@@ -255,7 +248,6 @@ nav .img_wrapper img:hover {
   transform: scale(1.05);
 }
 
-/* CONTENT AREA */
 .zeldaContent {
   display: flex;
   flex-direction: column;
@@ -264,7 +256,6 @@ nav .img_wrapper img:hover {
   flex: 1;
 }
 
-/* HEADER (title + heart) */
 .zeldaHeader {
   display: flex;
   align-items: center;
@@ -294,7 +285,6 @@ nav .img_wrapper img:hover {
   transform: scale(1.1);
 }
 
-/* DETAILS */
 .location {
   font-size: 0.9rem;
   color: #333;
@@ -312,7 +302,6 @@ nav .img_wrapper img:hover {
   margin-top: auto; /* pushes desc down if space available */
 }
 
-/* GRID HOLDER (for the flow across screen sizes) */
 #displayHolder {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
@@ -320,9 +309,7 @@ nav .img_wrapper img:hover {
   padding-top: var(--space-lg);
 }
 
-/* ================================
-   Dark Mode Variant
-   ================================ */
+/* ======== Dark Mode ============= */
 @media (prefers-color-scheme: dark) {
   body {
     background-color: #0f0f0f;
@@ -393,5 +380,11 @@ nav .img_wrapper img:hover {
   #loadMore:hover {
     background: #333;
     transform: translateY(-3px);
+  }
+}
+
+@media (max-width: 780px) {
+  #filterBar {
+    display: none;
   }
 }
