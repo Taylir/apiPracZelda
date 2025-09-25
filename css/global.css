@@ -383,6 +383,14 @@ nav .img_wrapper img:hover {
   }
 }
 
+.toast {
+  position: fixed;
+  bottom: 8px;
+  right: 8px;
+  padding: 16px;
+  background-color: rgba(36, 36, 36, 0.8);
+}
+
 @media (max-width: 780px) {
   #filterBar {
     display: none;
